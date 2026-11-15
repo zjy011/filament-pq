@@ -24,7 +24,7 @@ def predict_image(model, image, size, config, threshold, device):
     return label_rles(postprocess(probability >= threshold, disk, config))
 
 
-def predict_dataset(dataset, ids, checkpoint_path, config, threshold=0.5, device_name="auto"):
+def iter_predict_dataset(dataset, ids, checkpoint_path, config, threshold=0.5, device_name="auto"):
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     if checkpoint["dataset_sha256"] != dataset.sha256:
         raise ValueError("Checkpoint was trained on a different annotation file")
@@ -33,7 +33,6 @@ def predict_dataset(dataset, ids, checkpoint_path, config, threshold=0.5, device
     model = build_model(checkpoint["encoder"], weights=None)
     model.load_state_dict(checkpoint["state_dict"])
     model.to(device).eval()
-    results = []
     for key in ids:
         observation = dataset.observations[key]
         image = dataset.read_image(key)
@@ -44,14 +43,15 @@ def predict_dataset(dataset, ids, checkpoint_path, config, threshold=0.5, device
             {"annotation_id": a.id, **evaluate_pair(a.rles(observation.shape), prediction)}
             for a in observation.annotations
         ]
-        results.append(
-            {
-                "id": key,
-                "site": observation.site,
-                "seconds": seconds,
-                "predictions": prediction,
-                "comparisons": comparisons,
-                "counts": asdict(aggregate_counts(comparisons)),
-            }
-        )
-    return results
+        yield {
+            "id": key,
+            "site": observation.site,
+            "seconds": seconds,
+            "predictions": prediction,
+            "comparisons": comparisons,
+            "counts": asdict(aggregate_counts(comparisons)),
+        }
+
+
+def predict_dataset(dataset, ids, checkpoint_path, config, threshold=0.5, device_name="auto"):
+    return list(iter_predict_dataset(dataset, ids, checkpoint_path, config, threshold, device_name))

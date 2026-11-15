@@ -46,7 +46,7 @@ def predict_job(job):
     }
 
 
-def run_predictions(dataset, ids, config, workers=1, cache=None):
+def iter_predictions(dataset, ids, config, workers=1, cache=None, pool=None):
     jobs = [
         (
             str(dataset.images / dataset.observations[key].file_name),
@@ -56,19 +56,31 @@ def run_predictions(dataset, ids, config, workers=1, cache=None):
         )
         for key in ids
     ]
-    if workers == 1:
-        return [predict_job(job) for job in jobs]
-    with ProcessPoolExecutor(max_workers=workers) as pool:
-        return list(pool.map(predict_job, jobs))
+    if pool is not None:
+        yield from pool.map(predict_job, jobs)
+    elif workers == 1:
+        for job in jobs:
+            yield predict_job(job)
+    else:
+        with ProcessPoolExecutor(max_workers=workers) as executor:
+            yield from executor.map(predict_job, jobs)
+
+
+def run_predictions(dataset, ids, config, workers=1, cache=None, pool=None):
+    return list(iter_predictions(dataset, ids, config, workers, cache, pool))
 
 
 def provenance(dataset, split_path, config):
     source_root = Path(__file__).resolve().parent.parent
     source_hash = hashlib.sha256()
+    evaluation_hash = hashlib.sha256()
     for directory in ("filament", "scripts"):
         for path in sorted((source_root / directory).rglob("*.py")):
             source_hash.update(path.relative_to(source_root).as_posix().encode())
             source_hash.update(path.read_bytes())
+            if directory == "filament" or path.name == "run_experiment.py":
+                evaluation_hash.update(path.relative_to(source_root).as_posix().encode())
+                evaluation_hash.update(path.read_bytes())
     try:
         revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
         dirty = bool(subprocess.check_output(["git", "status", "--porcelain"], text=True).strip())
@@ -77,6 +89,7 @@ def provenance(dataset, split_path, config):
     return {
         "dataset_sha256": dataset.sha256,
         "source_sha256": source_hash.hexdigest(),
+        "evaluation_sha256": evaluation_hash.hexdigest(),
         "split_sha256": split_fingerprint(split_path),
         "config": asdict(config),
         "git_revision": revision,
@@ -91,4 +104,7 @@ def provenance(dataset, split_path, config):
 
 
 def write_json(path, value):
-    Path(path).write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    path = Path(path)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    temporary.replace(path)

@@ -16,7 +16,7 @@
   按观测站与标注人数联合分层，同一文件名的全部标注始终归在一起。
 - 已写入主划分和六个留一站划分，划分文件绑定标注文件校验和，禁止静默覆盖不同划分。
   checkpoint 使用规范化 JSON 的划分摘要，避免 Windows/Colab 换行符差异导致误判。
-- 在 Windows / Python 3.12 上验证；当前本地 Torch 为 CPU 版。
+- 在 Windows / Python 3.12 上验证；现已升级为 PyTorch 2.11.0 + CUDA 12.8，使用本机 RTX 4060 8 GB。
   `requirements-tested.txt` 记录测试时的完整依赖，不要求经典流程安装 Torch。
 
 ## 已实现的功能
@@ -82,6 +82,10 @@ U-Net 的 E7a 入口包含 ResNet-34/ImageNet、单通道输入、每 epoch 每�
 proposal 的历史 0.2 s/image 直接比较。正式 CPU 延迟实验应单进程、关闭缓存、单独运行。
 
 ## 验证与后续工作
+
+2026-11-15 后续进展：完整调参和正式 GPU 训练已启动，恢复运行、验证集后处理搜索、
+clDice、多种子/跨站实验队列和独立盲审工具已补齐。当前使用方法见
+[完整实验运行说明](RUNNING_EXPERIMENTS.md)。以下保留第一阶段的历史结果。
 
 - 本地测试：27 项通过；GitHub Actions 的 Windows/Linux 核心测试均通过。
   官方 notebook 对照：20 张真实 tune 图，另加空标注样例，IoU 逐元素相等且 PQ 精确相等。

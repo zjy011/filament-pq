@@ -1,0 +1,57 @@
+# Fixed before any held-out evaluation. Human E5 labels are collected separately.
+seed: 543
+bootstrap_samples: 1000
+primary_iou: 0.5
+robustness_iou: 0.3
+main_split: splits/main.json
+classic_tuning:
+  start: configs/quick_tuned.yaml
+  search: configs/search.yaml
+  sample_size: 150
+  rounds: 2
+  top_k: 5
+e3:
+  parameters: 3
+  ranking: largest one-parameter PQ range among observed tune search trials
+  selection_data: 150-observation tune sample only
+  report: full tune and full test; do not reselect the final model
+e5:
+  sample_size: 100
+  sampling: unique predictions isolated against at least one reference
+  reviewers: 2
+  labels: [possible_filament, sunspot, limb_artifact, other]
+unet:
+  encoder: resnet34
+  pretrained: imagenet
+  optimizer: Adam
+  learning_rate: 0.0003
+  max_epochs: 50
+  patience: 8
+  selection: native-resolution validation PQ
+  postprocessing: two coordinate-search rounds on val only
+e7a:
+  size: 512
+  seeds: [543]
+  losses: [L1]
+  batch_size: 4
+  accumulate: 1
+e7b:
+  size: 1024
+  seeds: [543, 544, 545]
+  losses: [L1, L2]
+  batch_size: 1
+  accumulate: 4
+  cldice_iterations: 10
+  cldice_weight: 0.5
+  note: Effective batch 4; microbatch 1 limits 8 GB GPU memory and changes batch-normalization statistics.
+e6:
+  sites: [Bh, Ch, Lh, Mh, Th, Uh]
+  classic_start: configs/baseline.yaml
+  classic_search: configs/search_site.yaml
+  classic_sample_size: 150
+  classic_rounds: 2
+  classic_top_k: 3
+  note: Fixed baseline M0-M6 avoids transferring parameters tuned on the held-out site. Also run this restricted recipe on main for matched comparisons.
+  unet_size: 512
+  unet_seed: 543
+  unet_loss: L1

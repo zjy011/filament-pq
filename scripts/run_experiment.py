@@ -19,7 +19,7 @@ from filament.evaluate import (
     human_comparison,
     summarize,
 )
-from filament.experiment import provenance, run_predictions, write_json
+from filament.experiment import iter_predictions, provenance, write_json
 from filament.masks import export_csv
 from filament.pipeline import load_config
 from filament.splits import load_split, split_fingerprint
@@ -41,6 +41,9 @@ def main():
     parser.add_argument("--bootstrap", type=int, default=1000)
     parser.add_argument("--overlays", type=int, default=6)
     parser.add_argument("--finalize-test", action="store_true")
+    parser.add_argument(
+        "--resume", action="store_true", help="Resume an interrupted, unfinished run"
+    )
     parser.add_argument("--checkpoint", type=Path, help="Optional trained U-Net checkpoint")
     parser.add_argument("--probability-threshold", type=float, default=0.5)
     parser.add_argument("--device", default="auto")
@@ -74,8 +77,10 @@ def main():
         )
     if not ids:
         parser.error("Selected partition is empty")
-    if args.out.exists() and any(args.out.iterdir()):
+    if args.out.exists() and any(args.out.iterdir()) and not args.resume:
         parser.error("Output directory must be empty; previous experiments are immutable")
+    if args.resume and (args.out / "metrics.json").exists():
+        parser.error("Completed experiments cannot be resumed or evaluated again")
     args.out.mkdir(parents=True, exist_ok=True)
     metadata = {
         **provenance(dataset, args.split, config),
@@ -87,6 +92,22 @@ def main():
         "probability_threshold": args.probability_threshold if args.checkpoint else None,
         "timing_scope": "segmentation + RLE; excludes image IO and evaluation",
     }
+    metadata = json.loads(json.dumps(metadata))
+    if args.resume:
+        previous = json.loads((args.out / "provenance.json").read_text(encoding="utf-8"))
+        for key in (
+            "dataset_sha256",
+            "split_sha256",
+            "config",
+            "partition",
+            "image_ids",
+            "checkpoint_sha256",
+            "probability_threshold",
+            "evaluation_sha256",
+            "packages",
+        ):
+            if previous[key] != metadata[key]:
+                parser.error(f"Resume differs in {key}; retain the original source and settings")
     receipt = None
     if args.partition == "test":
         key = hashlib.sha256(
@@ -104,17 +125,43 @@ def main():
         receipt = Path("results/test_registry") / f"{key}.json"
         receipt.parent.mkdir(parents=True, exist_ok=True)
         # Exclusive creation prevents accidental repeated test-set evaluation.
-        with receipt.open("x", encoding="utf-8") as handle:
-            json.dump({"status": "started", "output": str(args.out.resolve())}, handle)
-    write_json(args.out / "provenance.json", metadata)
+        if args.resume:
+            saved = json.loads(receipt.read_text(encoding="utf-8"))
+            if saved != {"status": "started", "output": str(args.out.resolve())}:
+                parser.error("Receipt is complete or belongs to a different output")
+        else:
+            with receipt.open("x", encoding="utf-8") as handle:
+                json.dump({"status": "started", "output": str(args.out.resolve())}, handle)
+    if not args.resume:
+        write_json(args.out / "provenance.json", metadata)
+    partial = args.out / "raw_images"
+    partial.mkdir(exist_ok=True)
+    results = [
+        json.loads(path.read_text(encoding="utf-8")) for path in sorted(partial.glob("*.json"))
+    ]
+    completed = {row["id"] for row in results}
+    if not completed <= set(ids):
+        parser.error("Partial results contain unexpected IDs")
+    pending = [key for key in ids if key not in completed]
     if args.checkpoint:
-        from filament.unet.inference import predict_dataset
+        from filament.unet.inference import iter_predict_dataset
 
-        results = predict_dataset(
-            dataset, ids, args.checkpoint, config, args.probability_threshold, args.device
+        stream = iter_predict_dataset(
+            dataset, pending, args.checkpoint, config, args.probability_threshold, args.device
         )
     else:
-        results = run_predictions(dataset, ids, config, args.workers, args.cache)
+        stream = iter_predictions(dataset, pending, config, args.workers, args.cache)
+    for row in stream:
+        write_json(partial / f"{row['id']}.json", row)
+        results.append(row)
+        write_json(
+            args.out / "progress.json",
+            {"status": "predicting", "images": len(results), "total": len(ids)},
+        )
+        if len(results) % 50 == 0:
+            print(f"Predicted {len(results)}/{len(ids)}", flush=True)
+    results.sort(key=lambda row: row["id"])
+    write_json(args.out / "progress.json", {"status": "summarizing", "images": len(results)})
     comparisons = [c for r in results for c in r["comparisons"]]
     image_counts = {r["id"]: Counts(**r["counts"]) for r in results}
     human_counts, method_counts, relaxed = {}, {}, []
@@ -170,12 +217,13 @@ def main():
                 method_counts, human_counts, samples=args.bootstrap, seed=args.seed
             ),
         }
-    write_json(args.out / "metrics.json", metrics)
     write_json(args.out / "per_image.json", results)
     write_json(args.out / "predictions.json", predictions)
     export_csv(args.out / "predictions.csv", predictions)
+    write_json(args.out / "metrics.json", metrics)
     if receipt:
         write_json(receipt, {"status": "complete", "output": str(args.out.resolve())})
+    write_json(args.out / "progress.json", {"status": "complete", "images": len(results)})
     print(
         json.dumps(
             {key: metrics[key] for key in ("observations", "pq", "sq", "rq", "dice", "pq_ci")},

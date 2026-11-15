@@ -142,7 +142,9 @@ def prepare(image: np.ndarray, config: PipelineConfig, cache: str | Path | None 
         fd, temporary = tempfile.mkstemp(suffix=".npz", dir=path.parent)
         try:
             with os.fdopen(fd, "wb") as handle:
-                np.savez_compressed(handle, ratio=ratio, mask=disk.mask)
+                # Repeated coordinate-search reads are CPU-bound with DEFLATE.
+                # Store exact arrays uncompressed; cached and uncached values agree.
+                np.savez(handle, ratio=ratio, mask=disk.mask)
             os.replace(temporary, path)
         finally:
             if os.path.exists(temporary):

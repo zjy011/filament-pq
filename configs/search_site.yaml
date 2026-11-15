@@ -1,0 +1,15 @@
+stages:
+  - name: M3_threshold
+    options:
+      - {threshold: 0.85}
+      - {threshold: 0.88}
+      - {threshold: 0.90}
+      - {threshold: 0.92}
+      - {threshold: 0.93}
+      - {threshold: 0.96}
+  - name: M4_area
+    options:
+      - {min_area: 300}
+      - {min_area: 600}
+      - {min_area: 1000}
+      - {min_area: 2000}

@@ -3,7 +3,9 @@
 import argparse
 import csv
 import json
+from collections import Counter
 from pathlib import Path
+from zipfile import ZIP_DEFLATED, ZipFile
 
 import cv2
 import numpy as np
@@ -34,15 +36,14 @@ def main():
     results = json.loads((args.run / "per_image.json").read_text())
     predictions = json.loads((args.run / "predictions.json").read_text())
     # An instance may be an FP against several annotators; sample it only once.
-    candidates = sorted(
-        {
-            (r["id"], e["index"])
-            for r in results
-            for c in r["comparisons"]
-            for e in c["errors"]
-            if e["side"] == "fp" and e["category"] == "isolated"
-        }
+    occurrences = Counter(
+        (r["id"], e["index"])
+        for r in results
+        for c in r["comparisons"]
+        for e in c["errors"]
+        if e["side"] == "fp" and e["category"] == "isolated"
     )
+    candidates = sorted(occurrences)
     if not candidates:
         parser.error("No isolated false positives found")
     selected = np.random.default_rng(args.seed).choice(
@@ -59,11 +60,12 @@ def main():
         y1, y2 = max(0, yy.min() - args.padding), min(image.shape[0], yy.max() + args.padding + 1)
         x1, x2 = max(0, xx.min() - args.padding), min(image.shape[1], xx.max() + args.padding + 1)
         crop = cv2.cvtColor(image[y1:y2, x1:x2], cv2.COLOR_GRAY2BGR)
+        raw_crop = crop.copy()
         contours, _ = cv2.findContours(
             mask[y1:y2, x1:x2].astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
         cv2.drawContours(crop, contours, -1, (0, 255, 255), 1)
-        success, encoded = cv2.imencode(".png", crop)
+        success, encoded = cv2.imencode(".png", np.concatenate([raw_crop, crop], axis=1))
         if not success:
             raise OSError("Failed to encode crop")
         encoded.tofile(args.out / "crops" / f"{sample}.png")
@@ -73,6 +75,7 @@ def main():
                 "sample_id": sample,
                 "observation_id": observation_id,
                 "prediction_index": int(instance),
+                "isolated_fp_occurrences": occurrences[(observation_id, instance)],
             }
         )
     for reviewer in ("a", "b"):
@@ -85,15 +88,40 @@ def main():
     (args.out / "curator_only").mkdir()
     write_json(
         args.out / "curator_only" / "key.json",
-        {"run": str(args.run), "seed": args.seed, "samples": key},
+        {
+            "run": str(args.run),
+            "seed": args.seed,
+            "samples": key,
+            "population_instances": len(candidates),
+            "population_isolated_fp_occurrences": sum(occurrences.values()),
+        },
     )
     (args.out / "INSTRUCTIONS.txt").write_text(
         "Review independently. Do not inspect curator_only or the source experiment.\n"
         "Labels: possible_filament, sunspot, limb_artifact, other.\n"
-        "Yellow outlines identify the candidate; no other annotator labels are shown.\n"
+        "Left: original crop. Right: yellow outline identifies the candidate.\n"
+        "No other annotator labels are shown. Fill every row; leave notes when uncertain.\n"
+        "Unzip your reviewer package, open index.html, label all samples, then export CSV.\n"
+        "Alternatively, edit your blank CSV directly. Do not discuss labels before both exports.\n"
+        "possible_filament: elongated dark solar structure plausibly missed by an annotator.\n"
+        "sunspot: compact dark spot; limb_artifact: boundary/ring artifact; other: other/noise.\n"
         "These non-expert labels support sensitivity analysis, not corrected ground truth.\n",
         encoding="utf-8",
     )
+    from scripts.review_page import make_review_page
+
+    for reviewer in ("a", "b"):
+        with ZipFile(args.out / f"reviewer_{reviewer}.zip", "w", ZIP_DEFLATED) as bundle:
+            bundle.write(args.out / f"reviewer_{reviewer}.csv", f"reviewer_{reviewer}.csv")
+            bundle.write(args.out / "INSTRUCTIONS.txt", "INSTRUCTIONS.txt")
+            bundle.writestr("index.html", make_review_page(rows, reviewer))
+            bundle.writestr(
+                "DATA_CREDIT.txt",
+                "Crops from MAGFiLO v1.0 / NSO GONG H-alpha.\n"
+                "CC BY-NC 4.0; https://doi.org/10.7910/DVN/J6JNVK\n",
+            )
+            for row in rows:
+                bundle.write(args.out / row[1], row[1])
     print(f"Prepared {len(rows)} unique candidates in {args.out}")
 
 
