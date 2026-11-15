@@ -112,15 +112,93 @@ Even so, the minimum goal is realistic. The data, the evaluator and a working ba
 
 ```
 filament-pq/
-├── README.md
-└── docs/
-    ├── CS543_proposal.md   # Proposal in the Canvas quiz format / 按 Canvas quiz 格式整理的 proposal（英文）
-    └── CS543_plan.md       # Implementation plan for the team / 组内实现计划（中文）
+├── filament/             # Data, masks, M0–M6, metrics, visualization, optional U-Net
+├── scripts/              # Download, experiments, tuning, human comparison, E5 crops, training
+├── configs/              # Baseline, extended, full/quick coordinate searches
+├── splits/               # Frozen observation IDs: main + six site holdouts
+├── tests/                # Synthetic regression tests; no dataset download required
+├── data_manifest.json    # Public image URLs, sizes and SHA-256 checksums
+├── docs/                 # Proposal, plan and implementation notes
+├── data/                 # Downloaded locally, ignored by Git
+└── results/              # Local experiment artifacts, ignored by Git
 ```
 
-Code will follow the layout in `docs/CS543_plan.md` §7 (`filament/`, `configs/`, `scripts/`, `splits/`). The dataset and experiment outputs are not committed.
+The first implementation is available. See [implementation notes](docs/IMPLEMENTATION.md)
+for verified behavior and remaining experiments. The figures earlier in this README
+are from the proposal's feasibility study; `configs/baseline.yaml` is a new, explicit
+starting configuration, not a recovered copy of `feasibility.py`.
 
-代码会按 `docs/CS543_plan.md` 第 7 节的结构组织（`filament/`、`configs/`、`scripts/`、`splits/`）。数据集和实验输出不提交到仓库。
+第一版实现已可运行，验证情况和后续工作见[实现说明](docs/IMPLEMENTATION.md)。
+上面的历史数字来自 proposal；当前 baseline 是从零实现的明确配置。
+原始数据、缓存、模型权重和实验输出保存在本地，不提交到 Git。
+
+## Quick start / 开始运行
+
+Python 3.11+ (tested on Windows with Python 3.12). Run from this repository's root.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe -m scripts.prepare_data --download-images
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m scripts.run_experiment --config configs/baseline.yaml --out results/baseline_tune --partition tune
+```
+
+On Linux/macOS use `.venv/bin/python` instead of `.\.venv\Scripts\python.exe`.
+The downloader resumes existing files and verifies checksums and dimensions. It
+fetches the 61 MB annotation JSON and about 606 MB of images from Dataverse/GONG.
+`requirements-tested.txt` records the full development environment, including
+optional CPU Torch packages; normal installations should use the extras above.
+
+```powershell
+# Full planned coordinate search: 150 tuning images, two rounds, top five rechecked on all tune
+.\.venv\Scripts\python.exe -m scripts.tune --out results/tuning
+# Short development search; still rechecks finalists on all 671 tune observations
+.\.venv\Scripts\python.exe -m scripts.tune --search configs/search_quick.yaml --sample-size 24 --rounds 1 --top-k 2 --out results/quick_tuning
+# Annotator agreement (tune only by default)
+.\.venv\Scripts\python.exe -m scripts.inter_annotator
+# Create E2 configurations from the selected method
+.\.venv\Scripts\python.exe -m scripts.make_ablations --config results/tuning/best.yaml
+# Blinded E5 crops and two independent reviewer CSVs
+.\.venv\Scripts\python.exe -m scripts.label_fp --run results/baseline_tune --out results/fp_review
+```
+
+An experiment writes `provenance.json`, `metrics.json`, `per_image.json`, prediction
+RLE JSON/CSV, and PNG overlays. Metrics pool counts across annotation sets; bootstrap
+resamples whole observations. `--cache cache/preprocess` enables M0/M1 caching;
+leave it off for latency measurements. Timing excludes image IO and metric computation.
+
+```powershell
+# Optional E7a U-Net: defaults to 512 px, ResNet-34/ImageNet, Dice+BCE, validation-PQ early stopping
+.\.venv\Scripts\python.exe -m pip install -e ".[unet]"
+.\.venv\Scripts\python.exe -m scripts.train_unet --out results/unet
+.\.venv\Scripts\python.exe -m scripts.run_experiment --checkpoint results/unet/best.pt --partition val --config configs/baseline.yaml --out results/unet_val
+```
+
+Tune the U-Net probability threshold and post-processing **only on `val`** before
+freezing its final configuration. The full automated U-Net post-processing search,
+clDice extension and formal E1–E7 results are still pending. The classical tuning
+script uses `tune` only and must not be reused for U-Net validation selection.
+
+Test evaluation requires `--partition test --finalize-test`, disallows `--limit`,
+and records a local receipt keyed by the data split, method configuration and model
+checkpoint. It refuses to repeat the same test run. Inspect an interrupted run's
+receipt before manually removing it; never delete completed receipts to retune.
+Do not run final test evaluation until all method choices are frozen.
+
+## Official metric check / 官方评分核对
+
+Download and inspect the organizer's notebook (Apache-2.0); it is kept outside Git:
+
+```powershell
+curl.exe -L --fail https://www.kaggle.com/api/v1/kernels/pull/azimahmadzadeh/self-evaluation-notebook -o data/official-notebook-response.json
+.\.venv\Scripts\python.exe -m scripts.validate_official --notebook data/official-notebook-response.json --count 20
+```
+
+The check runs its original Torch overlap/PQ functions against our RLE implementation.
+Empty annotation sets are preserved by our dataset index. The notebook's scorer
+handles empty sets, but its CSV-only iterator cannot enumerate sets with no rows;
+our runner explicitly includes them, as required by the project protocol.
 
 ## References / 参考
 

@@ -1,0 +1,64 @@
+stages:
+  - name: M0_disk
+    options:
+      - {disk_inset: 0.02}
+      - {disk_inset: 0.03}
+      - {disk_inset: 0.05}
+  - name: M1_background
+    options:
+      - {background: none}
+      - {background: radial}
+      - {background: median, background_kernel: 15}
+      - {background: median, background_kernel: 31}
+      - {background: median, background_kernel: 63}
+  - name: M2_smooth
+    options:
+      - {gaussian_sigma: 0}
+      - {gaussian_sigma: 1}
+      - {gaussian_sigma: 2}
+  - name: M3_threshold
+    options:
+      - {threshold_method: single, threshold: 0.85}
+      - {threshold_method: single, threshold: 0.88}
+      - {threshold_method: single, threshold: 0.90}
+      - {threshold_method: single, threshold: 0.93}
+      - {threshold_method: single, threshold: 0.96}
+      - {threshold_method: hysteresis, seed_threshold: 0.85, grow_threshold: 0.93}
+      - {threshold_method: hysteresis, seed_threshold: 0.88, grow_threshold: 0.94}
+      - {threshold_method: hysteresis, seed_threshold: 0.90, grow_threshold: 0.96}
+      - {threshold_method: frangi, seed_threshold: 0.88, grow_threshold: 0.94, frangi_threshold: 0.01}
+  - name: M4_area
+    options:
+      - {min_area: 300}
+      - {min_area: 600}
+      - {min_area: 1000}
+      - {min_area: 2000}
+  - name: M4_shape
+    options:
+      - {min_axis_ratio: 1}
+      - {min_axis_ratio: 2}
+      - {min_axis_ratio: 3}
+  - name: M4_morphology
+    options:
+      - {opening_radius: 1, closing_radius: 0}
+      - {opening_radius: 1, closing_radius: 2}
+      - {opening_radius: 1, closing_radius: 4}
+      - {opening_radius: 2, closing_radius: 0}
+      - {opening_radius: 2, closing_radius: 2}
+      - {opening_radius: 2, closing_radius: 4}
+  - name: M5_instances
+    options:
+      - {instances: components}
+      - {instances: merge, merge_distance: 10, merge_angle: 20}
+      - {instances: merge, merge_distance: 20, merge_angle: 20}
+      - {instances: merge, merge_distance: 40, merge_angle: 20}
+      - {instances: merge, merge_distance: 10, merge_angle: 40}
+      - {instances: merge, merge_distance: 20, merge_angle: 40}
+      - {instances: merge, merge_distance: 40, merge_angle: 40}
+      - {instances: watershed, merge_distance: 20, merge_angle: 20}
+  - name: M6_boundary
+    options:
+      - {dilation_radius: 0}
+      - {dilation_radius: 1}
+      - {dilation_radius: 2}
+      - {dilation_radius: 3}

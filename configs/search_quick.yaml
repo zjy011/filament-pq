@@ -1,0 +1,15 @@
+# Development smoke search; use search.yaml for the full planned experiment.
+stages:
+  - name: threshold
+    options:
+      - {threshold: 0.88}
+      - {threshold: 0.92}
+      - {threshold: 0.95}
+  - name: minimum_area
+    options:
+      - {min_area: 300}
+      - {min_area: 1000}
+  - name: boundary
+    options:
+      - {dilation_radius: 1}
+      - {dilation_radius: 2}
