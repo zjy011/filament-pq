@@ -14,7 +14,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "ruff>=0.9,<1"]
-unet = ["torch>=2.2,<3", "torchvision>=0.17,<1", "segmentation-models-pytorch>=0.4,<1"]
+# The unified torch.amp.GradScaler API is available from PyTorch 2.3.
+unet = ["torch>=2.3,<3", "torchvision>=0.18,<1", "segmentation-models-pytorch>=0.4,<1"]
 report = ["matplotlib>=3.8,<4", "reportlab>=4,<5", "pypdf>=5,<7"]
 
 [tool.setuptools.packages.find]
