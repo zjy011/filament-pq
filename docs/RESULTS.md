@@ -3,6 +3,32 @@
 2026-11-15. This page distinguishes completed held-out results from ongoing work.
 The experiment recipes are fixed in `configs/study.yaml`.
 
+## E1: completed main classical comparison
+
+The full classical search ran 65 distinct configurations in two coordinate rounds
+on 150 tune observations, then reranked five candidates on all 671 tune observations.
+The winner's full-tune PQ is 0.229454. Frozen E1/E2/E3 configurations and the
+sensitivity selection rule are recorded in `configs/frozen_classic/manifest.json`.
+
+On the 287 held-out observations:
+
+- Untuned baseline: **PQ 0.127786**, 95% CI [0.114653, 0.141833].
+- Tuned classical pipeline: **PQ 0.231352**, 95% CI [0.216677, 0.245503].
+  SQ 0.654277; RQ 0.353599; Dice 0.540362.
+- Classical minus baseline: **+0.103566 PQ**, paired 95% CI [0.087714, 0.119193].
+- U-Net minus classical: **+0.088034 PQ**, paired 95% CI [0.074461, 0.102020].
+
+The final classical configuration also matches the original organizer evaluator
+exactly on 20 tune images plus an empty-set fixture: maximum IoU difference 0,
+both PQ values 0.21464073608729464. This check uses the current GPU-enabled
+environment's Torch installation and runs the reference scorer on CPU.
+
+Evidence: [baseline](evidence/baseline_test.json), [classical](evidence/classical_test.json),
+[classical provenance](evidence/classical_provenance.json),
+[classical improvement](evidence/classical_improvement.json),
+[U-Net comparison](evidence/unet_vs_classic.json),
+[official check](evidence/official_validation_final.json).
+
 ## E7a: completed 512-pixel U-Net reference
 
 The ResNet34/ImageNet U-Net trained on 606 observations and selected its checkpoint
@@ -34,11 +60,15 @@ Model weights and per-image outputs remain in local `results/`.
 
 ## Work still running
 
-The full classical coordinate search evaluated 65 distinct configurations and is
-reranking five finalists on all 671 tune observations. Main classical tests,
-ablations, sensitivity curves and the 100-instance independent-review package
-follow this freeze. The 1024-pixel, three-seed/two-loss and six-site experiments
-are queued. No missing experiment is represented by an estimated result.
+Classical ablations and sensitivity curves are running. The two 100-instance
+independent-review ZIPs have been generated and checked: each contains exactly
+100 crops and one blank reviewer CSV, with no curator key. Sampling selected
+100 unique predictions from 336 eligible isolated-FP instances.
+
+The 1024-pixel, three-seed/two-loss and six-site experiments are queued. Formal
+1024 runs use true batch 4 after a successful 7.0 GiB capacity check; an earlier
+accumulation prototype is archived and excluded. No missing experiment is
+represented by an estimated result.
 
 The objective E5 evidence is automatic; the auxiliary two-person review and
 member names/contributions still require the team. See

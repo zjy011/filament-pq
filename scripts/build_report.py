@@ -572,10 +572,10 @@ def main():
         )
     p(
         "The fixed E7b recipe compares Dice+BCE (L1) with L1 plus 0.5 soft-clDice (L2), using seeds "
-        "543, 544 and 545 and ten soft-skeleton iterations. Both losses use microbatch one with "
-        "four-step gradient accumulation on the 8 GB GPU. Effective batch size is four, but "
-        "batch-normalization statistics and nonlinear batch reductions differ from E7a's batch-four "
-        "training. Thus E7a-to-E7b changes are not a perfectly isolated resolution intervention. "
+        "543, 544 and 545 and ten soft-skeleton iterations. Both losses use true batch four, "
+        "matching E7a. A batch-four capacity test including L2 peaked at approximately 7.0 GiB "
+        "reserved GPU memory. An earlier gradient-accumulation prototype was archived and excluded "
+        "before any E7b test evaluation; its scores do not enter the formal comparisons. "
         "Every checkpoint and post-processing recipe is selected on its own validation split."
     )
     rows = []

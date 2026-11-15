@@ -31,11 +31,13 @@ sensitivity and cross-site experiments. Learned models select every threshold
 and M4-M6 parameter using validation data only.
 
 E7b uses 1024 pixels and seeds 543/544/545 for each of L1 (Dice+BCE) and L2
-(L1 + 0.5 soft-clDice). Microbatch 1 with four-step gradient accumulation keeps
-the effective batch at four on the 8 GB device. Batch-normalization statistics
-therefore differ from the 512-pixel batch-4 control; resolution comparisons
-must acknowledge this additional implementation difference. Both 1024 losses
-use exactly the same microbatch setting. clDice uses the official foreground
+(L1 + 0.5 soft-clDice). Both 512- and 1024-pixel formal runs use true batch 4,
+without gradient accumulation. A capacity test with batch 4 and L2 used a peak
+6.918 GiB allocated / 7.008 GiB reserved, and a real-data two-step training smoke
+test passed. The earlier microbatch-1 prototype is preserved under
+`results/development_unet_1024_microbatch1_L1_543/` and excluded from formal
+comparisons. This hardware-only amendment preceded every E7b test evaluation.
+clDice uses the official foreground
 formulation and ten skeleton iterations; its license is in
 `THIRD_PARTY_NOTICES.md`.
 

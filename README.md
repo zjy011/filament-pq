@@ -7,8 +7,9 @@
 CS543 / ECE549 Computer Vision, Fall 2026 · Course project ("Compete" option)
 
 **Implementation status (2026-11-15):** data and evaluation tools are complete;
-the first formal U-Net test gives **PQ 0.3194 [95% CI 0.3054–0.3340]**.
-Full classical and extended experiments are running. See [measured results](docs/RESULTS.md)
+the held-out tests give baseline **PQ 0.1278**, tuned classical **0.2314**,
+and U-Net **0.3194**. The 100-sample blind-review packages are ready locally.
+Ablations, sensitivity and extended experiments are running. See [measured results](docs/RESULTS.md)
 and [resumable experiment commands](docs/RUNNING_EXPERIMENTS.md).
 The proposal-era feasibility values below are historical context, not current test results.
 

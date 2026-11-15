@@ -156,8 +156,6 @@ class Queue:
             "--patience",
             8,
         ]
-        if size == 1024:
-            args.extend(["--batch-size", 1, "--accumulate", 4])
         self.run("train_unet", args, Path(out) / "progress.json", resumable=True)
 
     def learned_evaluation(self, name, checkpoint, split="splits/main.json", control=False):

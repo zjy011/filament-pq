@@ -39,11 +39,11 @@ e7b:
   size: 1024
   seeds: [543, 544, 545]
   losses: [L1, L2]
-  batch_size: 1
-  accumulate: 4
+  batch_size: 4
+  accumulate: 1
   cldice_iterations: 10
   cldice_weight: 0.5
-  note: Effective batch 4; microbatch 1 limits 8 GB GPU memory and changes batch-normalization statistics.
+  note: True batch 4 validated on the 8 GB GPU with L2; earlier accumulation prototype is excluded from formal results.
 e6:
   sites: [Bh, Ch, Lh, Mh, Th, Uh]
   classic_start: configs/baseline.yaml

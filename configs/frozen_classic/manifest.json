@@ -1,0 +1,91 @@
+{
+  "frozen_utc": "2026-11-15T20:13:10.707155+00:00",
+  "selection_partition": "tune",
+  "source_tuning": "results\\full_tuning",
+  "tuning_provenance_sha256": "5d4cffadc278ce6a72e1ff7f571dd408741b61e37daf6a35902dc20a2f2c5634",
+  "config_sha256": {
+    "baseline": "85ee206cf30103f2774edf08473af54a4fb9c06ecfc2c877fa3c0ece77334658",
+    "full": "72f875fa5893c55cb61bb8cccb3c5d633c1bf87e63118985ed17cfc6dfb765df",
+    "no_background_correction": "52862b926af8a0f0de3c5cc3e02b1b5072b2827ad9e9436610c22bc732a675f1",
+    "single_threshold": "ea77fd9ead69c05e0b8d2cb380f0038cda063cd40126fa86612dae26772ff0c2",
+    "no_shape_filter": "0566899f7026ded2d8c5b2c82196dff46448fc5520f78541b2fb28f19e73f5c2",
+    "connected_components": "0d25e3e9615b634545242a4b78f5912343be95f76a6b045d01ac71581ec33161",
+    "no_boundary_expansion": "1b7653916c3520bcf229e41b563b64dff0a43d81fb51fc39f3de4da9816dca83",
+    "min_area_300": "5c2756eac47d8e4cbab7d467ecad9b6c42146f594f72da6560c29537ceb20155",
+    "min_area_1000": "1a3561b93f6099a1cdeb3a736cf0dcc0563b943e35c1107f61ae2bef122df0f3",
+    "min_area_2000": "d0f593c0d98e154196940819bacb9c1535269073e669d650a906c735b53d70cd",
+    "dilation_radius_2": "316ae431e90912a98717a2e7ad20302ad5db1bba35bd33991a8de47aee27fbe0",
+    "dilation_radius_3": "368f56bb6ab614954883e8f7ffa20dfbeae4b2b41080d9fbd7650f0283163b8d",
+    "min_axis_ratio_3": "0a0f69e2c96924ae62bb04290de75580b999153f1ac6ccfc4f43d8a850c6e7cb"
+  },
+  "aliases": {
+    "min_area_600": "full",
+    "dilation_radius_0": "no_boundary_expansion",
+    "dilation_radius_1": "full",
+    "min_axis_ratio_1": "no_shape_filter",
+    "min_axis_ratio_2": "full"
+  },
+  "sensitivity": {
+    "min_area": [
+      {
+        "value": 300,
+        "name": "min_area_300"
+      },
+      {
+        "value": 600,
+        "name": "min_area_600"
+      },
+      {
+        "value": 1000,
+        "name": "min_area_1000"
+      },
+      {
+        "value": 2000,
+        "name": "min_area_2000"
+      }
+    ],
+    "dilation_radius": [
+      {
+        "value": 0,
+        "name": "dilation_radius_0"
+      },
+      {
+        "value": 1,
+        "name": "dilation_radius_1"
+      },
+      {
+        "value": 2,
+        "name": "dilation_radius_2"
+      },
+      {
+        "value": 3,
+        "name": "dilation_radius_3"
+      }
+    ],
+    "min_axis_ratio": [
+      {
+        "value": 1,
+        "name": "min_axis_ratio_1"
+      },
+      {
+        "value": 2,
+        "name": "min_axis_ratio_2"
+      },
+      {
+        "value": 3,
+        "name": "min_axis_ratio_3"
+      }
+    ]
+  },
+  "sample_tune_pq_ranges": {
+    "disk_inset": 0.007225431480222949,
+    "background_kernel": 0.018848946029086933,
+    "gaussian_sigma": 0.0121900869488136,
+    "grow_threshold": 0,
+    "min_area": 0.12692016838192044,
+    "min_axis_ratio": 0.033365286345019146,
+    "merge_distance": 0.009373629656246413,
+    "dilation_radius": 0.062468118609257606
+  },
+  "rule": "Largest observed single-parameter tune PQ range; test curves cannot change the selected full model."
+}

@@ -1,0 +1,13 @@
+{
+  "first": "results\\final\\classic\\full\\test",
+  "second": "results\\final\\classic\\baseline\\test",
+  "pq_difference": {
+    "estimate": 0.10356586037869886,
+    "low": 0.08771440179092688,
+    "high": 0.11919260107280864,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": true
+  }
+}
