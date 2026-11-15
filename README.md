@@ -132,6 +132,11 @@ starting configuration, not a recovered copy of `feasibility.py`.
 上面的历史数字来自 proposal；当前 baseline 是从零实现的明确配置。
 原始数据、缓存、模型权重和实验输出保存在本地，不提交到 Git。
 
+Initial development run: on all 671 tuning observations, the baseline scores PQ
+0.1274 and `configs/quick_tuned.yaml` scores PQ 0.1891 after a short coordinate
+search. These are tuning scores, not held-out test results. Local tests (27) and
+Windows/Linux core CI passed; the 20-image official Torch comparison matches exactly.
+
 ## Quick start / 开始运行
 
 Python 3.11+ (tested on Windows with Python 3.12). Run from this repository's root.

@@ -15,6 +15,7 @@
 - 主划分种子 543：671 张 tune / 287 张 test；tune 内再分为 606 张 train / 65 张 val。
   按观测站与标注人数联合分层，同一文件名的全部标注始终归在一起。
 - 已写入主划分和六个留一站划分，划分文件绑定标注文件校验和，禁止静默覆盖不同划分。
+  checkpoint 使用规范化 JSON 的划分摘要，避免 Windows/Colab 换行符差异导致误判。
 - 在 Windows / Python 3.12 上验证；当前本地 Torch 为 CPU 版。
   `requirements-tested.txt` 记录测试时的完整依赖，不要求经典流程安装 Torch。
 
@@ -82,6 +83,18 @@ proposal 的历史 0.2 s/image 直接比较。正式 CPU 延迟实验应单进�
 
 ## 验证与后续工作
 
+- 本地测试：27 项通过；GitHub Actions 的 Windows/Linux 核心测试均通过。
+  官方 notebook 对照：20 张真实 tune 图，另加空标注样例，IoU 逐元素相等且 PQ 精确相等。
+- 当前基线 `configs/baseline.yaml` 在全部 671 张 tune 图上得到 PQ 0.127420、
+  SQ 0.647015、RQ 0.196935、Dice 0.378695；按图 1,000 次 bootstrap 的 PQ 95% 区间为
+  [0.117461, 0.137762]。本地结果：`results/baseline_v1/metrics.json`。
+- tune 中 287 张多人标注图共有 601 对标注，标注者间 PQ 0.329582。
+  这不是数学上限；人机结论应使用 runner 输出的 `same_reference` 比较。
+- 快速搜索使用 24 张 tune 图、1 轮坐标搜索、8 个不同配置，再在全部 671 张 tune 图上
+  复核前两名。选中配置已保存为 `configs/quick_tuned.yaml`：阈值 0.92、最小面积 600、
+  边界扩展 1 px；完整 tune 上 PQ 0.189096、SQ 0.662334、RQ 0.285499、Dice 0.486688。
+  原始记录为 `results/tuning_v1/{provenance,trials,finalists}.json` 和 `best.yaml`。
+  这是开发调参结果，尚无最终 test 分数，也没有把它作为经过完整搜索的最终方法。
 - 单元与回归测试覆盖 RLE 坐标、严格 IoU 阈值、空套、汇总规则、低阈值一对一匹配、
   全覆盖误差分类、配对 bootstrap、数据隔离、日面灰环、背景边界、合并和缓存失效等。
   本地完整测试包含可选 U-Net 前向/反向传播。CI 在 Windows/Linux 上测试经典核心。
