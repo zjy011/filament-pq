@@ -36,7 +36,7 @@ class Queue:
             out = Path(arguments[arguments.index("--out") + 1])
             if (out / "provenance.json").exists():
                 arguments.append("--resume")
-        command = [sys.executable, "-m", f"scripts.{module}", *arguments]
+        command = [sys.executable, "-m", "scripts.resilient_io", f"scripts.{module}", *arguments]
         tag = str(marker.parent).replace("\\", "_").replace("/", "_")
         log = self.logs / f"{tag}_{module}.log"
         write_json(

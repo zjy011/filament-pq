@@ -60,6 +60,10 @@ for every excluded site, using that split's own train/val IDs.
   configurations reuse their original run with an explicit `reused_run.json`.
 - Output JSON and checkpoints use atomic replacement. Raw data, caches,
   checkpoints, per-image results and reviewer packages remain outside Git.
+- Queue subprocesses use `scripts.resilient_io` to retry brief Windows sharing
+  violations during atomic file replacement. Permanent permission errors still
+  fail. This I/O-only wrapper preserves the numerical evaluator's source digest,
+  so an interrupted test resumes without relaxing the compatibility check.
 - A powered-off or sleeping laptop cannot keep these local jobs running.
   Resume with the commands above; do not edit evaluation code during a partial
   test run. Existing configuration choices must remain frozen.
@@ -88,7 +92,8 @@ FP result is reported separately and does not require human reviews.
 
 ## Current verification
 
-31 local tests pass. The pretrained 512-pixel CUDA forward/backward path and
+32 local tests pass, including transient/permanent file-replacement failures.
+The pretrained 512-pixel CUDA forward/backward path and
 training resumption ran successfully. Interrupted evaluation resumed from one
 saved image and reproduced the uninterrupted metrics exactly. Earlier official
 notebook verification remains exact on 20 tuning images plus an empty-set case.

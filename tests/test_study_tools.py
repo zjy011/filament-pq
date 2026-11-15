@@ -45,3 +45,30 @@ def test_sensitivity_excludes_inactive_parameters_and_uses_tune_only():
     assert impacts["threshold"] == pytest.approx(0.15)
     assert "merge_distance" not in impacts
     assert "grow_threshold" not in impacts
+
+
+def test_atomic_replace_retries_sharing_errors_and_keeps_failures(monkeypatch, tmp_path):
+    from scripts import resilient_io
+
+    attempts = []
+    real_replace = resilient_io._replace
+    source, target = tmp_path / "source", tmp_path / "target"
+    source.write_text("complete JSON")
+
+    def temporarily_locked(src, dst, **kwargs):
+        attempts.append(1)
+        if len(attempts) < 3:
+            raise PermissionError("transient sharing violation")
+        return real_replace(src, dst, **kwargs)
+
+    monkeypatch.setattr(resilient_io, "_replace", temporarily_locked)
+    monkeypatch.setattr(resilient_io.time, "sleep", lambda _: None)
+    resilient_io.replace_with_retry(source, target)
+    assert len(attempts) == 3 and target.read_text() == "complete JSON"
+
+    def permanently_locked(*args, **kwargs):
+        raise PermissionError("permanent denial")
+
+    monkeypatch.setattr(resilient_io, "_replace", permanently_locked)
+    with pytest.raises(PermissionError, match="permanent denial"):
+        resilient_io.replace_with_retry(source, target)
