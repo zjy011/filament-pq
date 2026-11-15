@@ -20,6 +20,9 @@ report = ["matplotlib>=3.8,<4", "reportlab>=4,<5", "pypdf>=5,<7"]
 [tool.setuptools.packages.find]
 include = ["filament*", "scripts*"]
 
+[tool.setuptools.package-data]
+"filament.unet" = ["LICENSE.clDice.txt"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 

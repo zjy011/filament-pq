@@ -192,10 +192,15 @@ def main():
     parser.add_argument("--phase", choices=["classic", "learned"], required=True)
     parser.add_argument("--extensions", action="store_true")
     parser.add_argument(
+        "--wait-for", type=Path, help="Wait for an independently running job's progress.json"
+    )
+    parser.add_argument(
         "--wait-existing", action="store_true", help="Wait for already-running full tune/E7a jobs"
     )
     args = parser.parse_args()
     queue = Queue(args.phase)
+    if args.wait_for:
+        queue.wait_existing(args.wait_for)
     if args.phase == "classic":
         if args.wait_existing:
             queue.wait_existing("results/full_tuning/progress.json")

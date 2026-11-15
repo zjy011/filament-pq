@@ -1,0 +1,13 @@
+{
+  "first": "results\\final\\unet_e7a",
+  "second": "results\\final\\unet_e7a_components_only",
+  "pq_difference": {
+    "estimate": 0.06824262288952326,
+    "low": 0.06037190775503411,
+    "high": 0.07605676516798852,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": true
+  }
+}

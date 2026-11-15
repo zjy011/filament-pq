@@ -14,3 +14,5 @@ results/
 .ruff_cache/
 cache/
 *.pt
+output/
+tmp/
