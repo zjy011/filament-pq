@@ -1,0 +1,134 @@
+{
+  "automatic_experiments_complete": false,
+  "pending_automatic": [
+    "unet_1024_L1_544",
+    "unet_1024_L1_545",
+    "unet_1024_L2_543",
+    "unet_1024_L2_544",
+    "unet_1024_L2_545",
+    "site_classic_Bh",
+    "site_classic_Ch",
+    "site_classic_Lh",
+    "site_classic_Mh",
+    "site_classic_Th",
+    "site_classic_Uh",
+    "site_unet_Bh",
+    "site_unet_Ch",
+    "site_unet_Lh",
+    "site_unet_Mh",
+    "site_unet_Th",
+    "site_unet_Uh"
+  ],
+  "human_review": "Awaiting two independent human reviews",
+  "artifacts": [
+    {
+      "path": "docs/evidence/report_summary.json",
+      "source": "results\\report\\summary.json",
+      "sha256": "db23b4dbd78c1ce0362825a0dad54dad7f56f40533ecfec5cffcde54527988be",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/figures/pipeline.png",
+      "source": "results\\report\\pipeline.png",
+      "sha256": "c561154c38c1f08070d22c59e02c47db94477640d68be1261b27f281d880f548",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/figures/main_results.png",
+      "source": "results\\report\\main_results.png",
+      "sha256": "35313f1a7179d3844f4cd6c46fd06fc26f61cd43d13b79080057e5960748031b",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/figures/site_results.png",
+      "source": "results\\report\\site_results.png",
+      "sha256": "ab3d94c0393f28904567eaf57602cacef7349af518ac39ed140618d1502af470",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/figures/sensitivity.png",
+      "source": "results\\report\\sensitivity.png",
+      "sha256": "b1bf8320305a9bdb3fdefadbef2cbb6f2ac6f7f94efe88153a984d738cf2b601",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/figures/errors.png",
+      "source": "results\\report\\errors.png",
+      "sha256": "f10533a4a401bd54e5d9f425d07c5642e38766411faa30c95b643ddcfc1f535d",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/figures/iou_training.png",
+      "source": "results\\report\\iou_training.png",
+      "sha256": "a31246fec8fb332ff24b476aa3bca9b82a9829ba2d70432cc16425102a891c39",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/figures/error_examples_fn.png",
+      "source": "results\\report\\error_examples_fn.png",
+      "sha256": "0c3752ac4057287ece99c789b12f1e054b64f5e4f366d8c441d534e9c46b4b2b",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/figures/error_examples_fp.png",
+      "source": "results\\report\\error_examples_fp.png",
+      "sha256": "bb5c533c035ccf24ec609ffe460a48b6871823fa4c2ee16a6a7389f4aab7bebb",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_543/metrics.json",
+      "source": "results\\final\\unet_1024_L1_543\\metrics.json",
+      "sha256": "cd9d61324bdc8bbd552748134ee1d2d1a84cbe3a9062758fb4596387448cfa45",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_543/provenance.json",
+      "source": "results\\final\\unet_1024_L1_543\\provenance.json",
+      "sha256": "3cf8ee91d6f1ce303552208e11440fe47642cbe678ac5f3cbc2434294ca39b5e",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/unet_1024_L1_543.yaml",
+      "source": "results\\final\\unet_1024_L1_543\\provenance.json",
+      "sha256": "912cc85f6d16fae1b80bb7d865a57b5cc4eaa35e0a51b65200b1f1c0753e8313",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_543/training_history.json",
+      "source": "results\\unet_1024_L1_543\\history.json",
+      "sha256": "dea9788c1fd2b602a7686925f8a73bf1759749606a7c335698bee44883638eb5",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_543/training_provenance.json",
+      "source": "results\\unet_1024_L1_543\\provenance.json",
+      "sha256": "8ac4cbd1facf8cdf79b9c08b51c77b1cf2cb1d7e1dcdd7833df02f8dbccdcb7f",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_543/validation_selection.json",
+      "source": "results\\unet_1024_L1_543_postprocess\\best.json",
+      "sha256": "481dcc9974817a33407c1e8ed837bf0cd93ef209c1b7f89054a378e6b1afbe98",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_main/metrics.json",
+      "source": "results\\final\\site_classic_main\\metrics.json",
+      "sha256": "46996a83b027d0c8c48e6edf32323d331b713fd7e894ef630462c49ded4f60ca",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_main/provenance.json",
+      "source": "results\\final\\site_classic_main\\provenance.json",
+      "sha256": "f169507efc7d1035c9f38fcf1ede5283fbffefefd5b545be912da7b2fb809242",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/site_classic_main.yaml",
+      "source": "results\\final\\site_classic_main\\provenance.json",
+      "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
+      "hash_mode": "utf8_lf"
+    }
+  ],
+  "scope": "Aggregate evidence, selected recipes and report figures only; no raw data, weights, blind-review packages or curator key. Recipes are copied from the recorded evaluation provenance, not reselected from test scores."
+}

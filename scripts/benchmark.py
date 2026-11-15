@@ -1,6 +1,7 @@
 """CPU latency on a fixed tune sample; no scoring or parameter selection."""
 
 import argparse
+import hashlib
 import json
 import os
 import platform
@@ -76,6 +77,13 @@ def main():
     result = {
         **provenance(dataset, "splits/main.json", config),
         "checkpoint": str(args.checkpoint),
+        "checkpoint_sha256": hashlib.sha256(args.checkpoint.read_bytes()).hexdigest()
+        if args.checkpoint
+        else None,
+        "probability_threshold": args.probability_threshold if args.checkpoint else None,
+        "sample_seed": args.seed,
+        "sample_partition": "tune",
+        "warmup_images": min(3, len(ids)),
         "processor": platform.processor(),
         "threads": 1,
         "cache": None,

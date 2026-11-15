@@ -92,9 +92,39 @@ FP result is reported separately and does not require human reviews.
 
 ## Current verification
 
-32 local tests pass, including transient/permanent file-replacement failures.
+33 local tests pass, including transient/permanent file-replacement failures
+and spawned-process pickling through the Windows I/O wrapper.
 The pretrained 512-pixel CUDA forward/backward path and
 training resumption ran successfully. Interrupted evaluation resumed from one
 saved image and reproduced the uninterrupted metrics exactly. Earlier official
 notebook verification remains exact on 20 tuning images plus an empty-set case.
 Intermediate search/validation scores are not test results.
+
+## CPU timing and report generation
+
+Stop the experiment queues before controlled CPU timing, then resume them afterward.
+All three benchmarks use the same 50 tune images, one numerical thread, three
+warmups and no preprocessing cache. Image IO and scoring are excluded.
+
+```powershell
+python -m scripts.benchmark --config configs/frozen_classic/baseline.yaml --out results/benchmark_baseline.json
+python -m scripts.benchmark --config configs/frozen_classic/full.yaml --out results/benchmark_classical.json
+python -m scripts.benchmark --config configs/unet_e7a_selected.yaml --checkpoint results/unet_e7a/best.pt --out results/benchmark_unet.json
+python -m scripts.analyze_results
+python -m scripts.build_report
+python -m scripts.package_submission
+```
+
+After all automatic experiments finish and the PDF passes visual inspection,
+`python -m scripts.export_evidence --require-complete --report output/pdf/final_report.pdf`
+copies aggregate evidence, selected recipes and figures into versioned `docs/`
+and `configs/`. Its manifest records source paths and SHA256 digests (text files
+use UTF-8/LF normalization to survive Git line-ending conversion); raw data,
+weights and review keys are not exported. Omit `--report --require-complete` to
+export an explicitly incomplete aggregate snapshot during execution.
+
+The analyzer requires completed E3 curves by default. `--allow-incomplete` is
+only for a draft and explicitly marks missing points. The report includes only
+measured extension results and leaves absent seeds, folds and human reviews pending.
+Its optional `--contributors` argument accepts a JSON list of objects with
+`name` and `contribution` fields. Render and inspect the PDF before submitting it.

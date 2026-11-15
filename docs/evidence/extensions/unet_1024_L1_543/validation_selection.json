@@ -1,0 +1,46 @@
+{
+  "spec": {
+    "threshold": 0.5,
+    "config": {
+      "disk_inset": 0.03,
+      "background": "median",
+      "background_size": 512,
+      "background_kernel": 31,
+      "gaussian_sigma": 0,
+      "threshold_method": "single",
+      "threshold": 0.9,
+      "seed_threshold": 0.88,
+      "grow_threshold": 0.94,
+      "frangi_scales": [
+        2,
+        4,
+        8
+      ],
+      "frangi_threshold": 0.01,
+      "opening_radius": 1,
+      "closing_radius": 0,
+      "min_area": 600,
+      "min_axis_ratio": 1,
+      "instances": "merge",
+      "merge_distance": 20,
+      "merge_angle": 20,
+      "split_min_area": 10000,
+      "split_peak_distance": 20,
+      "dilation_radius": 0
+    }
+  },
+  "metrics": {
+    "tp": 387,
+    "fp": 252,
+    "fn": 271,
+    "sum_iou": 255.4772778749466,
+    "pixel_intersection": 896564,
+    "pixel_gt": 1407166,
+    "pixel_pred": 1236651,
+    "comparisons": 108,
+    "pq": 0.3939510838472577,
+    "sq": 0.6601480048448233,
+    "rq": 0.5967617579028527,
+    "dice": 0.6782345374131417
+  }
+}

@@ -1,0 +1,776 @@
+{
+  "baseline": {
+    "dataset_sha256": "6f0cbe45e12d8e7a49847664fe9c9ab9d8ddd4efd9019af907af8e01db585bb6",
+    "source_sha256": "bedfe0aedfd65cc318cfd56a328e513edb27a60e088784421d5c4f82833f69fc",
+    "evaluation_sha256": "5a1e6371ae69408cd8a3764c439b3f285df481fd5e5addd268d3cd78efd6e1c9",
+    "split_sha256": "c25f18ec4f9bbc4aed405bed615c53f8e2ab71c5d4cc57c7a10335bbf089787e",
+    "config": {
+      "disk_inset": 0.03,
+      "background": "median",
+      "background_size": 512,
+      "background_kernel": 31,
+      "gaussian_sigma": 0,
+      "threshold_method": "single",
+      "threshold": 0.9,
+      "seed_threshold": 0.88,
+      "grow_threshold": 0.94,
+      "frangi_scales": [
+        2,
+        4,
+        8
+      ],
+      "frangi_threshold": 0.01,
+      "opening_radius": 1,
+      "closing_radius": 0,
+      "min_area": 600,
+      "min_axis_ratio": 1,
+      "instances": "components",
+      "merge_distance": 20.0,
+      "merge_angle": 20.0,
+      "split_min_area": 10000,
+      "split_peak_distance": 20,
+      "dilation_radius": 0
+    },
+    "git_revision": "c1aec519660741619f1a62af26d4dfbbfa3a0148",
+    "working_tree_dirty": true,
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "opencv-python-headless": "5.0.0.93",
+      "scikit-image": "0.26.0",
+      "pycocotools": "2.0.11"
+    },
+    "checkpoint": "None",
+    "checkpoint_sha256": null,
+    "probability_threshold": null,
+    "sample_seed": 543,
+    "sample_partition": "tune",
+    "warmup_images": 3,
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "threads": 1,
+    "cache": null,
+    "scope": "segmentation including M0 and RLE; image IO, evaluation and warmup excluded",
+    "per_image": [
+      {
+        "id": "20110203082634Lh",
+        "seconds": 0.2064020000398159
+      },
+      {
+        "id": "20110222083114Th",
+        "seconds": 0.19714800000656396
+      },
+      {
+        "id": "20110325171014Mh",
+        "seconds": 0.2067286999663338
+      },
+      {
+        "id": "20110621063134Lh",
+        "seconds": 0.23010410001734272
+      },
+      {
+        "id": "20110803164914Mh",
+        "seconds": 0.2818974999827333
+      },
+      {
+        "id": "20110824141054Bh",
+        "seconds": 0.23680509999394417
+      },
+      {
+        "id": "20110914063134Lh",
+        "seconds": 0.2754080999875441
+      },
+      {
+        "id": "20111009110234Ch",
+        "seconds": 0.20983629999682307
+      },
+      {
+        "id": "20111018063134Lh",
+        "seconds": 0.3359927000128664
+      },
+      {
+        "id": "20111128175514Mh",
+        "seconds": 0.31149659998482093
+      },
+      {
+        "id": "20111206102934Ch",
+        "seconds": 0.33315900003071874
+      },
+      {
+        "id": "20120213063134Lh",
+        "seconds": 0.30886950000422075
+      },
+      {
+        "id": "20120328164614Mh",
+        "seconds": 0.34824929997557774
+      },
+      {
+        "id": "20120509163414Mh",
+        "seconds": 0.35412919998634607
+      },
+      {
+        "id": "20121024164714Mh",
+        "seconds": 0.30952690000412986
+      },
+      {
+        "id": "20130319144654Bh",
+        "seconds": 0.21011330001056194
+      },
+      {
+        "id": "20130615002434Lh",
+        "seconds": 0.2902508999686688
+      },
+      {
+        "id": "20131020080114Th",
+        "seconds": 0.27573819999815896
+      },
+      {
+        "id": "20140127180134Ch",
+        "seconds": 0.36165070004062727
+      },
+      {
+        "id": "20140522070614Th",
+        "seconds": 0.26367840002058074
+      },
+      {
+        "id": "20140615195814Mh",
+        "seconds": 0.2936176999937743
+      },
+      {
+        "id": "20140615195854Bh",
+        "seconds": 0.21949069999391213
+      },
+      {
+        "id": "20140802072114Th",
+        "seconds": 0.3698970000259578
+      },
+      {
+        "id": "20140803234534Lh",
+        "seconds": 0.2743835999863222
+      },
+      {
+        "id": "20141001195834Ch",
+        "seconds": 0.3767383999656886
+      },
+      {
+        "id": "20150427162314Mh",
+        "seconds": 0.3436253000400029
+      },
+      {
+        "id": "20151026171014Mh",
+        "seconds": 0.3200963999843225
+      },
+      {
+        "id": "20151118172314Mh",
+        "seconds": 0.2997893000137992
+      },
+      {
+        "id": "20151128222134Lh",
+        "seconds": 0.23242380004376173
+      },
+      {
+        "id": "20151207173614Mh",
+        "seconds": 0.19466300000203773
+      },
+      {
+        "id": "20160125154854Bh",
+        "seconds": 0.2842790000140667
+      },
+      {
+        "id": "20160310133734Ch",
+        "seconds": 0.347634699952323
+      },
+      {
+        "id": "20160311020654Uh",
+        "seconds": 0.2906267999787815
+      },
+      {
+        "id": "20160606163514Mh",
+        "seconds": 0.3000047999667004
+      },
+      {
+        "id": "20160713133714Th",
+        "seconds": 0.2241970999748446
+      },
+      {
+        "id": "20160810234034Lh",
+        "seconds": 0.3047291999682784
+      },
+      {
+        "id": "20161111133734Ch",
+        "seconds": 0.2485152999870479
+      },
+      {
+        "id": "20170117175014Mh",
+        "seconds": 0.2312295999727212
+      },
+      {
+        "id": "20170417014150Uh",
+        "seconds": 0.22972199996002018
+      },
+      {
+        "id": "20171109023950Uh",
+        "seconds": 0.21252279996406287
+      },
+      {
+        "id": "20180507140210Th",
+        "seconds": 0.1928042999934405
+      },
+      {
+        "id": "20181030230030Lh",
+        "seconds": 0.18425099999876693
+      },
+      {
+        "id": "20190605025430Lh",
+        "seconds": 0.21731209999416023
+      },
+      {
+        "id": "20190929111530Ch",
+        "seconds": 0.19266590004554018
+      },
+      {
+        "id": "20200407165710Mh",
+        "seconds": 0.198776800010819
+      },
+      {
+        "id": "20200616235430Lh",
+        "seconds": 0.18767230003140867
+      },
+      {
+        "id": "20201003171010Mh",
+        "seconds": 0.18514549999963492
+      },
+      {
+        "id": "20210412122330Ch",
+        "seconds": 0.1856643999926746
+      },
+      {
+        "id": "20210708134250Bh",
+        "seconds": 0.18869889999041334
+      },
+      {
+        "id": "20220721185332Bh",
+        "seconds": 0.2108081000042148
+      }
+    ],
+    "median": 0.2560968500038143,
+    "max": 0.3767383999656886
+  },
+  "classical": {
+    "dataset_sha256": "6f0cbe45e12d8e7a49847664fe9c9ab9d8ddd4efd9019af907af8e01db585bb6",
+    "source_sha256": "bedfe0aedfd65cc318cfd56a328e513edb27a60e088784421d5c4f82833f69fc",
+    "evaluation_sha256": "5a1e6371ae69408cd8a3764c439b3f285df481fd5e5addd268d3cd78efd6e1c9",
+    "split_sha256": "c25f18ec4f9bbc4aed405bed615c53f8e2ab71c5d4cc57c7a10335bbf089787e",
+    "config": {
+      "disk_inset": 0.05,
+      "background": "median",
+      "background_size": 512,
+      "background_kernel": 31,
+      "gaussian_sigma": 1,
+      "threshold_method": "hysteresis",
+      "threshold": 0.92,
+      "seed_threshold": 0.88,
+      "grow_threshold": 0.94,
+      "frangi_scales": [
+        2,
+        4,
+        8
+      ],
+      "frangi_threshold": 0.01,
+      "opening_radius": 1,
+      "closing_radius": 0,
+      "min_area": 600,
+      "min_axis_ratio": 2,
+      "instances": "merge",
+      "merge_distance": 40,
+      "merge_angle": 40,
+      "split_min_area": 10000,
+      "split_peak_distance": 20,
+      "dilation_radius": 1
+    },
+    "git_revision": "c1aec519660741619f1a62af26d4dfbbfa3a0148",
+    "working_tree_dirty": true,
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "opencv-python-headless": "5.0.0.93",
+      "scikit-image": "0.26.0",
+      "pycocotools": "2.0.11"
+    },
+    "checkpoint": "None",
+    "checkpoint_sha256": null,
+    "probability_threshold": null,
+    "sample_seed": 543,
+    "sample_partition": "tune",
+    "warmup_images": 3,
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "threads": 1,
+    "cache": null,
+    "scope": "segmentation including M0 and RLE; image IO, evaluation and warmup excluded",
+    "per_image": [
+      {
+        "id": "20110203082634Lh",
+        "seconds": 0.7034432999789715
+      },
+      {
+        "id": "20110222083114Th",
+        "seconds": 0.6782342999940738
+      },
+      {
+        "id": "20110325171014Mh",
+        "seconds": 0.8799638000200503
+      },
+      {
+        "id": "20110621063134Lh",
+        "seconds": 0.8710367000312544
+      },
+      {
+        "id": "20110803164914Mh",
+        "seconds": 0.9209445999586023
+      },
+      {
+        "id": "20110824141054Bh",
+        "seconds": 0.7240425999625586
+      },
+      {
+        "id": "20110914063134Lh",
+        "seconds": 0.7893129999865778
+      },
+      {
+        "id": "20111009110234Ch",
+        "seconds": 0.7065818999544717
+      },
+      {
+        "id": "20111018063134Lh",
+        "seconds": 0.7936984000261873
+      },
+      {
+        "id": "20111128175514Mh",
+        "seconds": 0.8335883999825455
+      },
+      {
+        "id": "20111206102934Ch",
+        "seconds": 0.9696655999869108
+      },
+      {
+        "id": "20120213063134Lh",
+        "seconds": 0.8335442999959923
+      },
+      {
+        "id": "20120328164614Mh",
+        "seconds": 0.8384940999676473
+      },
+      {
+        "id": "20120509163414Mh",
+        "seconds": 0.8940050000092015
+      },
+      {
+        "id": "20121024164714Mh",
+        "seconds": 0.9633742000441998
+      },
+      {
+        "id": "20130319144654Bh",
+        "seconds": 0.861209399998188
+      },
+      {
+        "id": "20130615002434Lh",
+        "seconds": 0.9746255000354722
+      },
+      {
+        "id": "20131020080114Th",
+        "seconds": 0.8165049999952316
+      },
+      {
+        "id": "20140127180134Ch",
+        "seconds": 0.9081212999881245
+      },
+      {
+        "id": "20140522070614Th",
+        "seconds": 0.7773485999787226
+      },
+      {
+        "id": "20140615195814Mh",
+        "seconds": 0.7894251000252552
+      },
+      {
+        "id": "20140615195854Bh",
+        "seconds": 0.7527999000158161
+      },
+      {
+        "id": "20140802072114Th",
+        "seconds": 0.8542657000361942
+      },
+      {
+        "id": "20140803234534Lh",
+        "seconds": 0.8778097000322305
+      },
+      {
+        "id": "20141001195834Ch",
+        "seconds": 0.9090813000220805
+      },
+      {
+        "id": "20150427162314Mh",
+        "seconds": 0.8844829000299796
+      },
+      {
+        "id": "20151026171014Mh",
+        "seconds": 0.8035407999996096
+      },
+      {
+        "id": "20151118172314Mh",
+        "seconds": 0.8055884999921545
+      },
+      {
+        "id": "20151128222134Lh",
+        "seconds": 0.8051724000251852
+      },
+      {
+        "id": "20151207173614Mh",
+        "seconds": 0.6381008000462316
+      },
+      {
+        "id": "20160125154854Bh",
+        "seconds": 0.8235886999755166
+      },
+      {
+        "id": "20160310133734Ch",
+        "seconds": 0.8542089000111446
+      },
+      {
+        "id": "20160311020654Uh",
+        "seconds": 0.8544008000171743
+      },
+      {
+        "id": "20160606163514Mh",
+        "seconds": 0.7850103999953717
+      },
+      {
+        "id": "20160713133714Th",
+        "seconds": 0.7159555000253022
+      },
+      {
+        "id": "20160810234034Lh",
+        "seconds": 0.7847770000225864
+      },
+      {
+        "id": "20161111133734Ch",
+        "seconds": 0.7535577000235207
+      },
+      {
+        "id": "20170117175014Mh",
+        "seconds": 0.7295536000165157
+      },
+      {
+        "id": "20170417014150Uh",
+        "seconds": 0.6905756000196561
+      },
+      {
+        "id": "20171109023950Uh",
+        "seconds": 0.6679105999646708
+      },
+      {
+        "id": "20180507140210Th",
+        "seconds": 0.5901085999794304
+      },
+      {
+        "id": "20181030230030Lh",
+        "seconds": 0.6039524000370875
+      },
+      {
+        "id": "20190605025430Lh",
+        "seconds": 0.7266919999965467
+      },
+      {
+        "id": "20190929111530Ch",
+        "seconds": 0.6038756999769248
+      },
+      {
+        "id": "20200407165710Mh",
+        "seconds": 0.6265397000242956
+      },
+      {
+        "id": "20200616235430Lh",
+        "seconds": 0.5933153000078164
+      },
+      {
+        "id": "20201003171010Mh",
+        "seconds": 0.593976600037422
+      },
+      {
+        "id": "20210412122330Ch",
+        "seconds": 0.6033649999881163
+      },
+      {
+        "id": "20210708134250Bh",
+        "seconds": 0.6061678000260144
+      },
+      {
+        "id": "20220721185332Bh",
+        "seconds": 0.7389222999918275
+      }
+    ],
+    "median": 0.7893690500059165,
+    "max": 0.9746255000354722
+  },
+  "unet": {
+    "dataset_sha256": "6f0cbe45e12d8e7a49847664fe9c9ab9d8ddd4efd9019af907af8e01db585bb6",
+    "source_sha256": "bedfe0aedfd65cc318cfd56a328e513edb27a60e088784421d5c4f82833f69fc",
+    "evaluation_sha256": "5a1e6371ae69408cd8a3764c439b3f285df481fd5e5addd268d3cd78efd6e1c9",
+    "split_sha256": "c25f18ec4f9bbc4aed405bed615c53f8e2ab71c5d4cc57c7a10335bbf089787e",
+    "config": {
+      "disk_inset": 0.03,
+      "background": "median",
+      "background_size": 512,
+      "background_kernel": 31,
+      "gaussian_sigma": 0,
+      "threshold_method": "single",
+      "threshold": 0.9,
+      "seed_threshold": 0.88,
+      "grow_threshold": 0.94,
+      "frangi_scales": [
+        2,
+        4,
+        8
+      ],
+      "frangi_threshold": 0.01,
+      "opening_radius": 2,
+      "closing_radius": 2,
+      "min_area": 600,
+      "min_axis_ratio": 1,
+      "instances": "merge",
+      "merge_distance": 20,
+      "merge_angle": 40,
+      "split_min_area": 10000,
+      "split_peak_distance": 20,
+      "dilation_radius": 0
+    },
+    "git_revision": "c1aec519660741619f1a62af26d4dfbbfa3a0148",
+    "working_tree_dirty": true,
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "opencv-python-headless": "5.0.0.93",
+      "scikit-image": "0.26.0",
+      "pycocotools": "2.0.11"
+    },
+    "checkpoint": "results\\unet_e7a\\best.pt",
+    "checkpoint_sha256": "da59310ffab1eca0738eecf291b154451c9a44f991aaa5a01aed1a244d085947",
+    "probability_threshold": 0.5,
+    "sample_seed": 543,
+    "sample_partition": "tune",
+    "warmup_images": 3,
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "threads": 1,
+    "cache": null,
+    "scope": "segmentation including M0 and RLE; image IO, evaluation and warmup excluded",
+    "per_image": [
+      {
+        "id": "20110203082634Lh",
+        "seconds": 1.074620999977924
+      },
+      {
+        "id": "20110222083114Th",
+        "seconds": 1.0228220999706537
+      },
+      {
+        "id": "20110325171014Mh",
+        "seconds": 1.065833400003612
+      },
+      {
+        "id": "20110621063134Lh",
+        "seconds": 1.2124934999737889
+      },
+      {
+        "id": "20110803164914Mh",
+        "seconds": 1.2854814999736845
+      },
+      {
+        "id": "20110824141054Bh",
+        "seconds": 1.1123835000325926
+      },
+      {
+        "id": "20110914063134Lh",
+        "seconds": 1.3798376999911852
+      },
+      {
+        "id": "20111009110234Ch",
+        "seconds": 1.1900839000009
+      },
+      {
+        "id": "20111018063134Lh",
+        "seconds": 1.165672099974472
+      },
+      {
+        "id": "20111128175514Mh",
+        "seconds": 1.265762499999255
+      },
+      {
+        "id": "20111206102934Ch",
+        "seconds": 1.451362599967979
+      },
+      {
+        "id": "20120213063134Lh",
+        "seconds": 1.2231528999982402
+      },
+      {
+        "id": "20120328164614Mh",
+        "seconds": 1.2228833999834023
+      },
+      {
+        "id": "20120509163414Mh",
+        "seconds": 1.2191633000038564
+      },
+      {
+        "id": "20121024164714Mh",
+        "seconds": 1.2112336000427604
+      },
+      {
+        "id": "20130319144654Bh",
+        "seconds": 1.1592653000261635
+      },
+      {
+        "id": "20130615002434Lh",
+        "seconds": 1.2346546999760903
+      },
+      {
+        "id": "20131020080114Th",
+        "seconds": 1.2406318000284955
+      },
+      {
+        "id": "20140127180134Ch",
+        "seconds": 1.3515164999989793
+      },
+      {
+        "id": "20140522070614Th",
+        "seconds": 1.2058306999970227
+      },
+      {
+        "id": "20140615195814Mh",
+        "seconds": 1.164049500017427
+      },
+      {
+        "id": "20140615195854Bh",
+        "seconds": 1.1394902000320144
+      },
+      {
+        "id": "20140802072114Th",
+        "seconds": 1.2285015999805182
+      },
+      {
+        "id": "20140803234534Lh",
+        "seconds": 1.23360059998231
+      },
+      {
+        "id": "20141001195834Ch",
+        "seconds": 1.3149154999991879
+      },
+      {
+        "id": "20150427162314Mh",
+        "seconds": 1.2059220999944955
+      },
+      {
+        "id": "20151026171014Mh",
+        "seconds": 1.1835392000502907
+      },
+      {
+        "id": "20151118172314Mh",
+        "seconds": 1.1926395999616943
+      },
+      {
+        "id": "20151128222134Lh",
+        "seconds": 1.1203188999788836
+      },
+      {
+        "id": "20151207173614Mh",
+        "seconds": 1.118259400012903
+      },
+      {
+        "id": "20160125154854Bh",
+        "seconds": 1.2484853999922052
+      },
+      {
+        "id": "20160310133734Ch",
+        "seconds": 1.2431309000239708
+      },
+      {
+        "id": "20160311020654Uh",
+        "seconds": 1.199728799983859
+      },
+      {
+        "id": "20160606163514Mh",
+        "seconds": 1.1955518999602646
+      },
+      {
+        "id": "20160713133714Th",
+        "seconds": 1.1238109999685548
+      },
+      {
+        "id": "20160810234034Lh",
+        "seconds": 1.2268112999736331
+      },
+      {
+        "id": "20161111133734Ch",
+        "seconds": 1.111855299968738
+      },
+      {
+        "id": "20170117175014Mh",
+        "seconds": 1.1478109000017866
+      },
+      {
+        "id": "20170417014150Uh",
+        "seconds": 1.0621297000325285
+      },
+      {
+        "id": "20171109023950Uh",
+        "seconds": 1.0847289999946952
+      },
+      {
+        "id": "20180507140210Th",
+        "seconds": 1.045881099998951
+      },
+      {
+        "id": "20181030230030Lh",
+        "seconds": 1.079167400021106
+      },
+      {
+        "id": "20190605025430Lh",
+        "seconds": 1.1711809000116773
+      },
+      {
+        "id": "20190929111530Ch",
+        "seconds": 1.027421900012996
+      },
+      {
+        "id": "20200407165710Mh",
+        "seconds": 1.0196767000015825
+      },
+      {
+        "id": "20200616235430Lh",
+        "seconds": 1.0382615000125952
+      },
+      {
+        "id": "20201003171010Mh",
+        "seconds": 1.0612931999494322
+      },
+      {
+        "id": "20210412122330Ch",
+        "seconds": 1.0198061999981292
+      },
+      {
+        "id": "20210708134250Bh",
+        "seconds": 1.0175229999586008
+      },
+      {
+        "id": "20220721185332Bh",
+        "seconds": 1.153408199956175
+      }
+    ],
+    "median": 1.177360050030984,
+    "max": 1.451362599967979
+  }
+}

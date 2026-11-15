@@ -57,6 +57,9 @@ Evidence: [metrics](evidence/e7a_test.json),
 [paired post-processing comparison](evidence/e7a_postprocess_effect.json),
 [selected post-processing configuration](../configs/unet_e7a_selected.yaml).
 Model weights and per-image outputs remain in local `results/`.
+The learned pipeline fixes M0 disk inset at 0.03, while classical tuning selected
+0.05; M4-M6 parameters are independently selected. This compares selected complete
+pipelines sharing implementations, not a one-factor foreground-generator ablation.
 
 ## E2: completed ablations
 
@@ -73,11 +76,48 @@ result is retained without changing the selected pipeline. The intervals are
 pointwise exploratory comparisons; module effects are not additive.
 Evidence: [paired ablation effects](evidence/ablation_effects.json).
 
+## Controlled CPU timing
+
+With both experiment queues stopped, one numerical thread and the same 50 tune
+images, median / maximum seconds per image were:
+
+- Untuned baseline: 0.256 / 0.377.
+- Tuned classical: 0.789 / 0.975.
+- 512-pixel U-Net with selected post-processing: 1.177 / 1.451.
+
+The benchmark includes disk finding, segmentation and RLE output, excludes image
+IO and evaluation, performs three warmups, and uses no preprocessing cache.
+These are local CPU measurements rather than GPU throughput or a universal speed ranking.
+Evidence: [complete timing records and provenance](evidence/cpu_benchmarks.json).
+
+## E7b: first completed 1024-pixel seed
+
+L1 / seed 543 stopped after 15 epochs, selecting epoch 7. Its 60-trial
+validation-only post-processing search obtained validation PQ 0.393951.
+The frozen 287-observation test result is PQ **0.348055**, SQ 0.660164,
+RQ 0.527224 and Dice 0.670693, with 155 FN fragmentation occurrences.
+
+Against the 512-pixel L1 model with the same seed, the paired PQ change is
+**+0.028668**, 95% interval **[0.019544, 0.038226]**. This compares selected
+pipelines and holds the fitted models fixed; it does not measure training-seed
+uncertainty. Remaining seeds/losses are still running, so no three-seed mean
+or loss-function comparison is claimed yet.
+
+## E3: completed sensitivity curves
+
+All preregistered parameter settings are evaluated on 671 tune and 287 test
+observations. Minimum area 600 and dilation radius 1 maximize both sampled grids.
+The axis-ratio choice is less stable: tune prefers 2 by 0.0009 PQ, while test
+prefers 1 by 0.0027. The original ratio 2 stays frozen. Ratio 3 and overly large
+area/dilation settings reduce PQ on both partitions.
+
+See [curves](figures/sensitivity.png) and the numeric `sensitivity` entries in
+[the report summary](evidence/report_summary.json). These descriptive grids do
+not reselect a model using test performance.
+
 ## Work still running
 
-All E3 held-out parameter settings are complete; full-tune curve points are still
-running. The report generator supports explicitly marked incomplete drafts and
-requires complete curves by default. The two 100-instance
+The six-site and remaining 1024-pixel experiments are running. The two 100-instance
 independent-review ZIPs have been generated and checked: each contains exactly
 100 crops and one blank reviewer CSV, with no curator key. Sampling selected
 100 unique predictions from 336 eligible isolated-FP instances.

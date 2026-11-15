@@ -1,5 +1,9 @@
 # 第一版实现说明
 
+> 第一阶段存档：下文记录首次实现时的状态，包含当时尚未开始的工作。
+> 最新正式结果见 [RESULTS.md](RESULTS.md)，当前运行方式见
+> [RUNNING_EXPERIMENTS.md](RUNNING_EXPERIMENTS.md)。
+
 2026-11-15。此版本从零实现，不依赖 plan 中提到但未提供的 `feasibility.py`。
 它是可复现的实验基础设施和初步调参结果，不是已经完成的课程研究。
 

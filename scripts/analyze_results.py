@@ -69,6 +69,125 @@ def save(fig, out, name):
     plt.close(fig)
 
 
+def summarize_extensions(extensions):
+    """Only complete seed groups receive aggregate estimates."""
+    losses, sites = ("L1", "L2"), ("Bh", "Ch", "Lh", "Mh", "Th", "Uh")
+    expected = [f"unet_1024_{loss}_{seed}" for loss in losses for seed in (543, 544, 545)]
+    expected += ["site_classic_main"] + [
+        f"site_{method}_{site}" for method in ("classic", "unet") for site in sites
+    ]
+    result = {
+        "completed": [name for name in expected if name in extensions],
+        "pending": [name for name in expected if name not in extensions],
+        "loss_groups": {},
+        "seed_rows": [],
+        "site_rows": [],
+    }
+    for loss in losses:
+        rows = []
+        for seed in (543, 544, 545):
+            name = f"unet_1024_{loss}_{seed}"
+            if name not in extensions:
+                continue
+            m = extensions[name]
+            row = {
+                "name": name,
+                "loss": loss,
+                "seed": seed,
+                "pq": m["pq"],
+                "sq": m["sq"],
+                "rq": m["rq"],
+                "dice": m["dice"],
+                "fn_fragmentation": sum(
+                    v for k, v in m["errors"].items() if k.startswith("fn/fragmentation/")
+                ),
+            }
+            rows.append(row)
+            result["seed_rows"].append(row)
+        if len(rows) == 3:
+            result["loss_groups"][loss] = {
+                metric: {
+                    "mean": float(np.mean([r[metric] for r in rows])),
+                    "sample_sd": float(np.std([r[metric] for r in rows], ddof=1)),
+                }
+                for metric in ("pq", "fn_fragmentation")
+            }
+    main = extensions.get("site_classic_main")
+    if main:
+        unet = read("results/final/unet_e7a/metrics.json")
+        for site in sites:
+            for method, reference in (("classic", main), ("unet", unet)):
+                held = extensions.get(f"site_{method}_{site}")
+                if held:
+                    before = reference["by_site"][site]
+                    result["site_rows"].append(
+                        {
+                            "site": site,
+                            "method": method,
+                            "main_pq": before["pq"],
+                            "held_out_pq": held["pq"],
+                            "held_out_minus_main": held["pq"] - before["pq"],
+                            "main_comparisons": before["comparisons"],
+                            "held_out_comparisons": held["comparisons"],
+                            "held_out_observations": held["observations"],
+                        }
+                    )
+    return result
+
+
+def extension_figures(summary, out):
+    analysis = summary["extension_analysis"]
+    rows = analysis["seed_rows"]
+    if len(rows) == 6:
+        fig, axes = plt.subplots(1, 2, figsize=(9, 3.4), layout="constrained")
+        for ax, metric, title in zip(axes, ("pq", "fn_fragmentation"), ("PQ", "FN fragmentation")):
+            for j, loss in enumerate(("L1", "L2")):
+                group = analysis["loss_groups"][loss][metric]
+                ax.bar(
+                    j,
+                    group["mean"],
+                    yerr=group["sample_sd"],
+                    color=COLORS[j + 1],
+                    alpha=0.6,
+                    capsize=4,
+                )
+                points = [r[metric] for r in rows if r["loss"] == loss]
+                ax.scatter(np.arange(3) * 0.06 + j - 0.06, points, color="#202b35", zorder=3)
+            reference = summary["methods"]["U-Net"]
+            reference_value = (
+                reference["metrics"]["pq"]
+                if metric == "pq"
+                else reference["errors"]["fn/fragmentation"]
+            )
+            ax.axhline(reference_value, ls="--", color=COLORS[2], label="512 L1, one seed")
+            ax.set_xticks([0, 1], ["1024 L1", "1024 L2"])
+            ax.set(ylabel=title, title=f"{title}: mean and sample SD")
+            ax.legend(fontsize=8)
+        save(fig, out, "resolution_topology")
+    if len(analysis["site_rows"]) == 12:
+        fig, axes = plt.subplots(1, 2, figsize=(9, 3.2), layout="constrained")
+        for ax, method in zip(axes, ("classic", "unet")):
+            rows = [r for r in analysis["site_rows"] if r["method"] == method]
+            for key, label, color in (
+                ("main_pq", "Mixed-site main subset", COLORS[0]),
+                ("held_out_pq", "Entire excluded site", COLORS[1]),
+            ):
+                ax.plot(
+                    [r["site"] for r in rows],
+                    [r[key] for r in rows],
+                    "o-",
+                    label=label,
+                    color=color,
+                )
+            ax.set(
+                ylabel="PQ",
+                xlabel="Site",
+                title="Classical restricted recipe" if method == "classic" else "512-pixel U-Net",
+            )
+            ax.legend(fontsize=8)
+        save(fig, out, "site_transfer")
+
+
 def error_examples(full, out):
     dataset = Dataset("data/magfilo_2024_v1.0.json", "data/images")
     predictions = read(Path(full["path"]) / "predictions.json")
@@ -316,6 +435,8 @@ def main():
         )
         ax.set(xlabel=parameter.replace("_", " "), ylabel="PQ")
         ax.legend(fontsize=8)
+    if summary["pending_curve_points"]:
+        fig.suptitle(f"Draft: {len(summary['pending_curve_points'])} curve points pending")
     save(fig, args.out, "sensitivity")
     fig, axes = plt.subplots(1, 2, figsize=(10, 4), layout="constrained")
     for ax, (side, categories) in zip(
@@ -368,7 +489,18 @@ def main():
     for path in sorted(Path("results/final").iterdir()):
         if path.name.startswith(("site_", "unet_1024_")) and (path / "metrics.json").exists():
             summary["extensions"][path.name] = read(path / "metrics.json")
-    for name in ("classical", "unet"):
+    summary["extension_analysis"] = summarize_extensions(summary["extensions"])
+    if "unet_1024_L1_543" in summary["extensions"]:
+        summary["extension_analysis"]["resolution_paired_seed_543"] = paired(
+            run("results/final/unet_1024_L1_543"), learned
+        )
+    for seed in (543, 544, 545):
+        if all(f"unet_1024_{loss}_{seed}" in summary["extensions"] for loss in ("L1", "L2")):
+            summary["extension_analysis"].setdefault("loss_paired_by_seed", {})[str(seed)] = paired(
+                run(f"results/final/unet_1024_L2_{seed}"), run(f"results/final/unet_1024_L1_{seed}")
+            )
+    extension_figures(summary, args.out)
+    for name in ("baseline", "classical", "unet"):
         path = Path(f"results/benchmark_{name}.json")
         if path.exists():
             summary.setdefault("cpu_benchmark", {})[name] = read(path)

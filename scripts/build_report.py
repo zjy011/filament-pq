@@ -259,6 +259,13 @@ def main():
         "A connected-components-only control removes morphology, area/shape filtering and boundary expansion."
     )
     p(
+        f"U-Net keeps the M0 disk inset fixed at {summary['unet_config']['disk_inset']:.2f} during training "
+        f"and inference; the classical search selected {cfg['disk_inset']:.2f}. Post-processing parameters "
+        "are also selected separately. E1/E7a therefore compares complete selected pipelines with shared "
+        "code, rather than a one-factor experiment that changes only the foreground generator. "
+        "The 512/1024 learned comparison keeps the disk inset fixed."
+    )
+    p(
         "Each prediction is compared separately with every annotation set of its observation. We "
         "pool TP, FP, FN and matched IoU sums before computing PQ = sum(IoU)/(TP + 0.5 FP + 0.5 FN), "
         "SQ = sum(IoU)/TP and RQ = TP/(TP + 0.5 FP + 0.5 FN). Empty annotation sets are retained, "
@@ -341,7 +348,7 @@ def main():
     figure(
         "site_results",
         "Figure 3. Main-test site breakdown. These observations belong to the ordinary mixed-site split; "
-        "they are not the leave-one-site-out experiments in Section 9.",
+        "they are not the leave-one-site-out experiments in Section 10.",
         165,
     )
     figure(
@@ -427,6 +434,22 @@ def main():
         "The complete table includes negative and null effects as well as improvements; no result is removed "
         "because it contradicts the intended purpose of a component."
     )
+    if not pending_points:
+        aligned = [
+            name.replace("_", " ")
+            for name, values in summary["sensitivity"].items()
+            if all(
+                max(values, key=lambda r: r[part])["value"] == cfg[name]
+                for part in ("tune", "test")
+            )
+        ]
+        p(
+            f"The frozen choices maximize both evaluated grids for {', '.join(aligned)}. "
+            "The shape-filter ablation shows no clear PQ benefit: removing the filter admits more "
+            "false positives but also recovers missed instances. The axis-ratio test peak therefore "
+            "does not justify replacing the frozen choice. Larger area thresholds and dilation radii "
+            "reduce PQ on both tune and test in these grids."
+        )
     figure(
         "sensitivity",
         "Figure 5. Parameter sensitivity. Dashed lines indicate the choices made using tuning data only.",
@@ -627,8 +650,27 @@ def main():
         )
 
     story.append(PageBreak())
-    heading("9. Extensions: resolution, topology and held-out sites")
+    heading("9. Resolution and topology extension (E7b)")
     extensions = summary["extensions"]
+    extension_analysis = summary["extension_analysis"]
+    seed_rows = extension_analysis["seed_rows"]
+    if len(seed_rows) < 6:
+        p(
+            f"<b>Extension progress: {len(seed_rows)} of 6 test evaluations complete.</b> Missing seeds remain pending."
+        )
+    if seed_rows:
+        table(
+            ["Loss / seed", "PQ", "SQ", "RQ", "Dice", "FN fragmentation"],
+            [
+                [
+                    f"{r['loss']} / {r['seed']}",
+                    *[f"{r[k]:.4f}" for k in ("pq", "sq", "rq", "dice")],
+                    r["fn_fragmentation"],
+                ]
+                for r in seed_rows
+            ],
+            [85, 69, 69, 69, 69, 107],
+        )
     rows = []
     for loss in ("L1", "L2"):
         entries = [extensions.get(f"unet_1024_{loss}_{seed}") for seed in (543, 544, 545)]
@@ -664,6 +706,32 @@ def main():
         "before any E7b test evaluation; its scores do not enter the formal comparisons. "
         "Every checkpoint and post-processing recipe is selected on its own validation split."
     )
+    if len(seed_rows) == 6:
+        figure(
+            "resolution_topology",
+            "Figure 8. Individual seeds (points) and three-seed mean +/- sample SD (bars). The 512-pixel "
+            "line is one seed and does not estimate seed variability at that resolution.",
+            190,
+        )
+    resolution = extension_analysis.get("resolution_paired_seed_543")
+    if resolution:
+        p(
+            f"For seed 543, 1024-pixel L1 minus 512-pixel L1 has PQ difference {ci(resolution)}. "
+            "This paired observation-bootstrap interval holds fitted models fixed; it does not quantify "
+            "training-seed uncertainty. Checkpoints and post-processing are independently selected at "
+            "each resolution, so the comparison describes the complete selected pipelines."
+        )
+    loss_differences = extension_analysis.get("loss_paired_by_seed", {})
+    if len(loss_differences) == 3:
+        deltas = [d["estimate"] for d in loss_differences.values()]
+        p(
+            f"Across the three matched seeds, the mean L2-minus-L1 PQ difference is {np.mean(deltas):+.4f} "
+            f"with sample SD {np.std(deltas, ddof=1):.4f}. Three seeds give limited evidence about "
+            "training variability; no superiority claim is inferred solely from the mean."
+        )
+
+    story.append(PageBreak())
+    heading("10. Held-out-site extension (E6)")
     rows = []
     for site in ("Bh", "Ch", "Lh", "Mh", "Th", "Uh"):
         c, u = extensions.get(f"site_classic_{site}"), extensions.get(f"site_unet_{site}")
@@ -674,21 +742,41 @@ def main():
                     site,
                     f"{main_c['by_site'][site]['pq']:.4f}",
                     f"{c['pq']:.4f}",
+                    f"{c['pq'] - main_c['by_site'][site]['pq']:+.4f}",
                     f"{unet['by_site'][site]['pq']:.4f}",
                     f"{u['pq']:.4f}",
+                    f"{u['pq'] - unet['by_site'][site]['pq']:+.4f}",
                 ]
             )
     if rows:
         table(
-            ["Site", "Classical main", "Classical held out", "U-Net main", "U-Net held out"],
+            [
+                "Site",
+                "Classical main",
+                "Classical held out",
+                "Difference",
+                "U-Net main",
+                "U-Net held out",
+                "Difference",
+            ],
             rows,
-            [48, 105, 105, 105, 105],
+            [36, 72, 72, 72, 72, 72, 72],
         )
     else:
         p(
-            "The six-site paired extension is not yet complete in this snapshot. The frozen queue "
+            "The six-site two-method extension is not yet complete in this snapshot. The frozen queue "
             "records completed fold outputs separately and does not infer unrun folds."
         )
+    if len(rows) < 6:
+        p(
+            f"<b>{len(rows)} of 6 sites have both methods and the matched main comparator complete.</b>"
+        )
+    p(
+        "Differences are held-out-site PQ minus main-split site PQ; negative values mean lower "
+        "performance in the held-out experiment. The restricted classical main comparator is "
+        "different from the fully tuned classical E1 pipeline.",
+        "Caption9",
+    )
     p(
         "Each E6 fold excludes one site from all training and parameter selection. The classical "
         "recipe fixes the untuned baseline modules and retunes only threshold and area, avoiding "
