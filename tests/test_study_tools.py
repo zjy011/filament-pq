@@ -72,3 +72,35 @@ def test_atomic_replace_retries_sharing_errors_and_keeps_failures(monkeypatch, t
     monkeypatch.setattr(resilient_io, "_replace", permanently_locked)
     with pytest.raises(PermissionError, match="permanent denial"):
         resilient_io.replace_with_retry(source, target)
+
+
+def test_resilient_wrapper_preserves_windows_spawn_pickling(tmp_path):
+    import shutil
+    import subprocess
+    import sys
+
+    from scripts import resilient_io
+
+    package = tmp_path / "scripts"
+    package.mkdir()
+    (package / "__init__.py").write_text("")
+    shutil.copyfile(resilient_io.__file__, package / "resilient_io.py")
+    (package / "probe.py").write_text(
+        "from concurrent.futures import ProcessPoolExecutor\n"
+        "from multiprocessing import get_context\n"
+        "def square(value):\n    return value * value\n"
+        "if __name__ == '__main__':\n"
+        "    with ProcessPoolExecutor(2, mp_context=get_context('spawn')) as pool:\n"
+        "        assert list(pool.map(square, [2, 3])) == [4, 9]\n"
+        "    print('spawn passed')\n",
+        encoding="utf-8",
+    )
+    completed = subprocess.run(
+        [sys.executable, "-m", "scripts.resilient_io", "scripts.probe"],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        check=True,
+        timeout=30,
+    )
+    assert "spawn passed" in completed.stdout

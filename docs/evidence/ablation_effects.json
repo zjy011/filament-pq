@@ -1,0 +1,47 @@
+{
+  "no_background_correction": {
+    "estimate": 0.1291324181095678,
+    "low": 0.11543509347914928,
+    "high": 0.14427536459855833,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": true
+  },
+  "single_threshold": {
+    "estimate": 0.03271276752507438,
+    "low": 0.02070424824619358,
+    "high": 0.044228468721023616,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": true
+  },
+  "no_shape_filter": {
+    "estimate": -0.002667757469644927,
+    "low": -0.008675317141100706,
+    "high": 0.003248708738952725,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": true
+  },
+  "connected_components": {
+    "estimate": 0.013564016223668707,
+    "low": 0.006988184466226655,
+    "high": 0.020475898682727207,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": true
+  },
+  "no_boundary_expansion": {
+    "estimate": 0.00758304234895632,
+    "low": 0.0028164799320908535,
+    "high": 0.012230554461106451,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": true
+  }
+}

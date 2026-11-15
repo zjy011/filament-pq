@@ -137,18 +137,19 @@ def main():
     )
     p(
         "Classical extraction predates this project. Shih and Kowalski [3] combined intensity "
-        "normalization, thresholding and morphological operations; later filament-recognition work "
-        "provides additional historical context [4-6]. Our components use standard image-processing "
+        "normalization, thresholding and morphological operations. Qu et al. [4] use image enhancement, "
+        "threshold selection, SVM discrimination and morphological analysis. Fuller et al. [5] clean "
+        "instrument artifacts before region growing and skeleton characterization. Bernasconi et al. [6] "
+        "extend automated detection to chirality characterization and temporal tracking. These studies "
+        "motivate the problem but are not reimplementations evaluated here. Our components use standard image-processing "
         "operations and are not claimed as algorithmic inventions. Modern learned alternatives include "
         "U-Net [7], semi-supervised filament detection [8], Flat U-Net [9] and EdgeAttNet [10]. We do not "
         "rank their published scores against ours because datasets, splits and evaluation targets differ."
     )
     p(
-        "Our questions are whether a non-learned pipeline improves substantially after tuning, which "
-        "modules account for its performance, whether the selected parameters are locally stable, "
-        "and which residual errors dominate. A learned foreground generator with the same family of "
-        "instance post-processing provides a controlled reference. clDice [11] and leave-one-site "
-        "experiments extend this analysis when their measured outputs are available."
+        "We study the effects of tuning and individual modules, local parameter stability and residual "
+        "errors. U-Net with shared instance post-processing provides a learned reference; clDice [11] "
+        "and leave-one-site experiments extend the analysis."
     )
     heading("2. Data and units of independence")
     p(
@@ -165,7 +166,6 @@ def main():
         "photograph. These are local held-out results, not Kaggle leaderboard results. Images and "
         "annotations are bound to checksums; the original dataset is available from Harvard Dataverse [1,2]."
     )
-
     story.append(PageBreak())
     heading("3. Methods and selection protocol")
     table(
@@ -242,6 +242,13 @@ def main():
         "its named module and does not retune the remaining settings. Identical ablations explicitly "
         "reuse the full-model result."
     )
+    story.append(PageBreak())
+    heading("Learned reference and evaluation protocol")
+    figure(
+        "pipeline",
+        "Figure 1. Foreground generation differs; instance conversion and evaluation share the same implementation.",
+        125,
+    )
     p(
         "E7a is an ImageNet-initialized ResNet34 U-Net with one input and one output channel. Each epoch "
         "selects one annotator per training image, then applies flips, right-angle rotations and modest "
@@ -251,14 +258,6 @@ def main():
         f"parameters are selected only on validation; the selected threshold is {summary['unet_threshold']:.2f}. "
         "A connected-components-only control removes morphology, area/shape filtering and boundary expansion."
     )
-    figure(
-        "pipeline",
-        "Pipeline overview. Foreground generation differs; instance conversion and evaluation share the same implementation.",
-        110,
-    )
-
-    story.append(PageBreak())
-    heading("4. Evaluation and main results (E1, E7a)")
     p(
         "Each prediction is compared separately with every annotation set of its observation. We "
         "pool TP, FP, FN and matched IoU sums before computing PQ = sum(IoU)/(TP + 0.5 FP + 0.5 FN), "
@@ -274,6 +273,15 @@ def main():
         "For the IoU &gt; 0.3 robustness check we use a one-to-one assignment maximizing eligible IoU. "
         "This lower-threshold score is auxiliary, not the selection objective."
     )
+    p(
+        "The principal comparisons use the frozen main split. Bootstrap intervals resample observations "
+        "rather than individual annotator comparisons; paired differences use the same sampled IDs for "
+        "both methods. Module ablations and sensitivity scans were frozen before test evaluation. "
+        "Completed test evaluations are recorded in a registry and reused for identical configurations. "
+        "Neither a test-score peak nor an unexpected ablation result changes the selected pipeline."
+    )
+    story.append(PageBreak())
+    heading("4. Main results (E1, E7a)")
     table(
         ["Method", "PQ [95% CI]", "SQ", "RQ", "Dice", "PQ @ .3"],
         [
@@ -288,11 +296,11 @@ def main():
             for name, entry in methods.items()
             for m in [entry["metrics"]]
         ],
-        [91, 137, 54, 54, 54, 78],
+        [90, 140, 53, 53, 53, 79],
     )
     figure(
         "main_results",
-        "Figure 1. Test PQ with observation-bootstrap uncertainty, and ground-truth instance recall. "
+        "Figure 2. Test PQ with observation-bootstrap uncertainty, and ground-truth instance recall. "
         "Area bins are &lt;600, 600-2,400 and &gt;2,400 native pixels.",
         205,
     )
@@ -308,6 +316,7 @@ def main():
         [[name.replace("_", " "), ci(value)] for name, value in summary["paired"].items()],
         [250, 218],
     )
+    p("Human context", "Heading2")
     p(
         "Human-machine comparison uses only multiply annotated test observations. Each annotator is "
         "held out in turn; that annotator and the method are compared against every remaining annotator, "
@@ -327,6 +336,50 @@ def main():
         ],
         [80, 117, 80, 191],
     )
+    story.append(PageBreak())
+    heading("Site breakdown and training")
+    figure(
+        "site_results",
+        "Figure 3. Main-test site breakdown. These observations belong to the ordinary mixed-site split; "
+        "they are not the leave-one-site-out experiments in Section 9.",
+        165,
+    )
+    figure(
+        "iou_training",
+        "Figure 4. Matched-instance IoU distributions and the E7a validation-PQ trajectory. "
+        "The histogram conditions on successful matches and cannot characterize missed instances.",
+        165,
+    )
+    p(
+        f"E7a completed {summary['training']['epochs']} epochs; its selected checkpoint is epoch "
+        f"{summary['training']['best_epoch']}. Logged epoch computation totals approximately "
+        f"{summary['training']['seconds'] / 60:.1f} minutes on the RTX 4060 Laptop. This excludes process "
+        "startup and some checkpoint IO and is not an isolated throughput benchmark. Concurrent classical "
+        "workers can affect wall-clock times. The validation set is reused for checkpoint and post-processing "
+        "selection, so validation PQ is optimistic and the untouched test score remains the main estimate."
+    )
+    table(
+        ["Site", "Comparisons", "Classical FN", "U-Net FN", "Classical FP", "U-Net FP"],
+        [
+            [
+                site,
+                full["by_site"][site]["comparisons"],
+                *[
+                    f"{m['by_site'][site][side] / m['by_site'][site]['comparisons']:.2f}"
+                    for side in ("fn", "fp")
+                    for m in (full, unet)
+                ],
+            ]
+            for site in sorted(full["by_site"])
+        ],
+        [48, 84, 84, 84, 84, 84],
+    )
+    p(
+        "FN and FP columns give instances per annotation comparison, accounting for unequal site sample "
+        "sizes and annotation multiplicities. Category-by-area-by-site counts are retained in the "
+        "machine-readable metrics. These descriptive site differences do not isolate instrument effects.",
+        "Caption9",
+    )
 
     story.append(PageBreak())
     heading("5. Ablations and sensitivity (E2-E3)")
@@ -335,7 +388,8 @@ def main():
         "ablated variant. All differences pool counts on the same test observations; confidence intervals "
         "use paired observation bootstrap. These exploratory module comparisons have pointwise intervals "
         "without multiple-comparison correction. They describe the frozen full configuration and do not "
-        "establish a module's universal benefit under separately reoptimized pipelines."
+        "establish a module's universal benefit under separately reoptimized pipelines. "
+        "The differences are not additive because the modules interact."
     )
     table(
         ["Replaced/removed component", "Full - ablated PQ [95% CI]", "Delta SQ", "Delta RQ"],
@@ -350,9 +404,15 @@ def main():
         ],
         [152, 188, 64, 64],
     )
+    pending_points = summary.get("pending_curve_points", [])
+    if pending_points:
+        p(
+            f"<b>Draft: {len(pending_points)} curve points are still running.</b> "
+            "Missing values are left blank, not interpolated or replaced by estimates."
+        )
     p(
-        "The exact parameter-selection ranking and grids are saved in the frozen manifest. The curves "
-        "below evaluate all 671 tune and all 287 test observations for each preregistered value. "
+        "The exact parameter-selection ranking and grids are saved in the frozen manifest. Completed "
+        "curve points evaluate all 671 tune or all 287 test observations for each preregistered value. "
         "A test peak away from the frozen value is an observation about transfer of the tuning choice; "
         "it is not used to select another test-winning configuration. An unchanged curve can reflect "
         "discrete component decisions that are locally insensitive to a parameter."
@@ -369,22 +429,39 @@ def main():
     )
     figure(
         "sensitivity",
-        "Figure 2. Parameter sensitivity. Dashed lines indicate the choices made using tuning data only.",
+        "Figure 5. Parameter sensitivity. Dashed lines indicate the choices made using tuning data only.",
         210,
     )
-    figure(
-        "iou_training",
-        "Figure 3. Matched-instance IoU distributions and the E7a validation-PQ trajectory. "
-        "The IoU histogram conditions on successful matches and cannot characterize missed instances.",
-        210,
+    error_keys = [
+        "fn/miss",
+        "fn/fragmentation",
+        "fn/localization",
+        "fp/isolated",
+        "fp/overmerge",
+        "fp/fragment_related",
+        "fp/localization",
+    ]
+    table(
+        [
+            "Full minus variant",
+            "FN miss",
+            "FN frag.",
+            "FN loc.",
+            "FP isol.",
+            "FP merge",
+            "FP frag.",
+            "FP loc.",
+        ],
+        [
+            [name.replace("_", " "), *[f"{v['error_changes'].get(k, 0):+d}" for k in error_keys]]
+            for name, v in summary["ablations"].items()
+        ],
+        [132, 48, 48, 48, 48, 48, 48, 48],
     )
     p(
-        f"E7a completed {summary['training']['epochs']} epochs; its selected checkpoint is epoch "
-        f"{summary['training']['best_epoch']}. Logged epoch computation totals approximately "
-        f"{summary['training']['seconds'] / 60:.1f} minutes on the RTX 4060 Laptop. This excludes process "
-        "startup and some checkpoint IO and is not an isolated throughput benchmark. Concurrent classical "
-        "workers can affect wall-clock times. The validation set is reused for checkpoint and post-processing "
-        "selection, so validation PQ is optimistic and the untouched test score remains the main estimate."
+        "Error-count changes use annotation-comparison occurrences. Negative values mean the full "
+        "pipeline has fewer errors in that category; these changes are not independent causal effects.",
+        "Caption9",
     )
 
     story.append(PageBreak())
@@ -399,7 +476,7 @@ def main():
     )
     figure(
         "errors",
-        "Figure 4. Error counts by category. Bar shade encodes small (light), medium and large (dark) "
+        "Figure 6. Error counts by category. Bar shade encodes small (light), medium and large (dark) "
         "instance areas. FN and FP sides are separate; a fragmented object can contribute to both.",
         255,
     )
@@ -440,7 +517,7 @@ def main():
         "events: no eruption outcomes or operational decision task are evaluated."
     )
     p(
-        "Qualitative examples on the following page are sampled with fixed seeds within each observed "
+        "Qualitative examples on the following pages are sampled with fixed seeds within each observed "
         "error category. They are illustrations rather than additional selection data. The manifest "
         "stores observation IDs, annotation IDs and instance indices so every crop can be reconstructed. "
         "Different annotators may assign the same prediction different error categories, which is one "
@@ -448,14 +525,23 @@ def main():
     )
 
     story.append(PageBreak())
-    heading("7. Representative error crops")
+    heading("7. Representative error crops: missed instances")
     figure(
-        "error_examples",
-        "Figure 5. Two examples per category when available. Cyan outlines denote the chosen "
-        "reference annotation and orange outlines the prediction. Rows separate FN misses, fragmentation, "
-        "localization, and FP overmerge, isolated, fragment-related and localization errors. These figures "
+        "error_examples_fn",
+        "Figure 7a. Two FN examples per category. Cyan outlines denote the chosen "
+        "reference annotation and orange outlines the prediction; thicker contours mark the sampled instance. "
+        "Rows separate misses, fragmentation and localization errors. These figures "
         "are excluded from the independent reviewer packages, which show no reference annotation.",
-        590,
+        540,
+    )
+    story.append(PageBreak())
+    heading("Representative error crops: unmatched predictions")
+    figure(
+        "error_examples_fp",
+        "Figure 7b. Two FP examples per category. Cyan denotes the reference and orange the prediction; "
+        "thicker contours identify the sampled prediction. Rows separate overmerge, isolated, "
+        "fragment-related and localization errors. The sample manifest preserves exact instance IDs.",
+        550,
     )
 
     story.append(PageBreak())
@@ -612,6 +698,11 @@ def main():
         "subset is smaller. Their difference is descriptive and combines domain exclusion with "
         "different evaluation samples and training sizes; it is not a paired causal domain-shift estimate."
     )
+    p(
+        "Shared preprocessing was developed before these folds using main-tune images from all six "
+        "sites. E6 therefore evaluates fitting and parameter-selection transfer within a fixed "
+        "design, rather than a prospectively blinded study on an entirely unknown instrument."
+    )
     heading("Reproducibility and contributions")
     p(
         "The repository stores code, configuration recipes, frozen split IDs and a checksum manifest. "
@@ -658,7 +749,7 @@ def main():
             "https://doi.org/10.1007/s11207-005-8364-1",
         ),
         (
-            "Bernasconi, Rust and Hakim (2005). Advanced automated solar filament detection and characterization code. Solar Physics 228, 97-117.",
+            "Bernasconi, Rust and Hakim (2005). Advanced Automated Solar Filament Detection and Characterization Code: Description, Performance, and Results. Solar Physics 228, 97-117.",
             "https://doi.org/10.1007/s11207-005-2766-y",
         ),
         (

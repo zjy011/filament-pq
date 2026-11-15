@@ -58,9 +58,26 @@ Evidence: [metrics](evidence/e7a_test.json),
 [selected post-processing configuration](../configs/unet_e7a_selected.yaml).
 Model weights and per-image outputs remain in local `results/`.
 
+## E2: completed ablations
+
+The full-minus-ablated PQ differences and paired 95% intervals are:
+
+- Background correction: +0.129132 [0.115435, 0.144275].
+- Hysteresis versus single threshold: +0.032713 [0.020704, 0.044228].
+- Shape filtering: -0.002668 [-0.008675, 0.003249].
+- Fragment merging versus connected components: +0.013564 [0.006988, 0.020476].
+- Boundary expansion: +0.007583 [0.002816, 0.012231].
+
+Shape filtering shows no clear benefit in this frozen configuration. This negative
+result is retained without changing the selected pipeline. The intervals are
+pointwise exploratory comparisons; module effects are not additive.
+Evidence: [paired ablation effects](evidence/ablation_effects.json).
+
 ## Work still running
 
-Classical ablations and sensitivity curves are running. The two 100-instance
+All E3 held-out parameter settings are complete; full-tune curve points are still
+running. The report generator supports explicitly marked incomplete drafts and
+requires complete curves by default. The two 100-instance
 independent-review ZIPs have been generated and checked: each contains exactly
 100 crops and one blank reviewer CSV, with no curator key. Sampling selected
 100 unique predictions from 336 eligible isolated-FP instances.

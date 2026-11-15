@@ -28,7 +28,9 @@ def main():
         raise SystemExit("Specify a project scripts.* module")
     module = sys.argv.pop(1)
     os.replace = replace_with_retry
-    runpy.run_module(module, run_name="__main__")
+    # Spawned workers must be able to import functions defined in the target
+    # script's __main__, notably tune_unet.score_job on Windows.
+    runpy.run_module(module, run_name="__main__", alter_sys=True)
 
 
 if __name__ == "__main__":

@@ -73,7 +73,10 @@ def error_examples(full, out):
     dataset = Dataset("data/magfilo_2024_v1.0.json", "data/images")
     predictions = read(Path(full["path"]) / "predictions.json")
     examples = []
-    fig, axes = plt.subplots(len(ERRORS), 2, figsize=(9, 16), layout="constrained")
+    figures = {
+        "fn": plt.subplots(3, 2, figsize=(9, 7.5), layout="constrained"),
+        "fp": plt.subplots(4, 2, figsize=(9, 10), layout="constrained"),
+    }
     for row, (side, category) in enumerate(ERRORS):
         available = {}
         for record in full["images"]:
@@ -88,7 +91,7 @@ def error_examples(full, out):
             len(keys), min(2, len(keys)), replace=False
         )
         for col in range(2):
-            ax = axes[row, col]
+            ax = figures[side][1][row if side == "fn" else row - 3, col]
             ax.axis("off")
             if col >= len(indices):
                 ax.text(0.5, 0.5, "No additional example", ha="center")
@@ -114,9 +117,13 @@ def error_examples(full, out):
                             patch, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
                         )
                         cv2.drawContours(crop, contours, -1, color, 1)
+            focus, _ = cv2.findContours(
+                target[y1:y2, x1:x2].astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+            )
+            cv2.drawContours(crop, focus, -1, (0, 240, 240) if side == "fn" else (255, 140, 30), 2)
             ax.imshow(crop)
             ax.set_title(
-                f"{side.upper()} / {category.replace('_', ' ')}\n{observation.id}", fontsize=9
+                f"{side.upper()} / {category.replace('_', ' ')}\n{observation.id}", fontsize=12
             )
             examples.append(
                 {
@@ -127,7 +134,8 @@ def error_examples(full, out):
                     "index": error["index"],
                 }
             )
-    save(fig, out, "error_examples")
+    for side, (fig, _) in figures.items():
+        save(fig, out, f"error_examples_{side}")
     return examples
 
 
@@ -135,6 +143,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=Path("results/report"))
     parser.add_argument("--skip-examples", action="store_true")
+    parser.add_argument(
+        "--allow-incomplete",
+        action="store_true",
+        help="Draft only: mark unfinished E3 curve points",
+    )
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     plt.rcParams.update(
@@ -169,6 +182,7 @@ def main():
         "ablations": {},
         "sensitivity": {},
         "extensions": {},
+        "pending_curve_points": [],
     }
     from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
@@ -177,10 +191,10 @@ def main():
     ax.axis("off")
     nodes = [
         (0.1, 1.0, 1.3, "2048 px image\nM0: disk"),
-        (1.9, 1.9, 2.6, "Classical M1-M3\nbackground / smoothing / threshold"),
-        (1.9, 0.2, 2.6, "U-Net (512 or 1024 px)\nprobability upsample + threshold"),
-        (5.0, 1.0, 2.0, "Shared M4-M6\nclean / instances / boundary"),
-        (7.6, 1.0, 2.2, "Per-annotator evaluation\npooled PQ / errors / bootstrap"),
+        (1.9, 1.9, 2.6, "Classical M1-M3\nBackground / smoothing\nThreshold"),
+        (1.9, 0.2, 2.6, "U-Net (512 / 1024 px)\nUpsample probability\nThreshold"),
+        (5.0, 1.0, 2.0, "Shared M4-M6\nClean / instances\nBoundary"),
+        (7.6, 1.0, 2.2, "Per-annotator scores\nPooled PQ / errors\nBootstrap"),
     ]
     for x, y, w, label in nodes:
         ax.add_patch(
@@ -188,7 +202,7 @@ def main():
                 (x, y), w, 0.65, boxstyle="round,pad=0.06", facecolor="#eaf2f5", edgecolor="#397287"
             )
         )
-        ax.text(x + w / 2, y + 0.325, label, ha="center", va="center", fontsize=8.5)
+        ax.text(x + w / 2, y + 0.325, label, ha="center", va="center", fontsize=10)
     for start, end in [
         ((1.4, 1.35), (1.9, 2.15)),
         ((1.4, 1.35), (1.9, 0.55)),
@@ -228,6 +242,27 @@ def main():
     axes[1].set(ylabel="Instance recall", title="Recall by ground-truth area", ylim=(0, 1))
     axes[1].legend(fontsize=8)
     save(fig, args.out, "main_results")
+    fig, axes = plt.subplots(1, 2, figsize=(10, 3.2), layout="constrained")
+    sites = sorted(full["metrics"]["by_site"])
+    for index, (name, r) in enumerate(list(methods.items())[:3]):
+        site_metrics = r["metrics"]["by_site"]
+        axes[0].plot(
+            sites, [site_metrics[s]["pq"] for s in sites], "o-", color=COLORS[index], label=name
+        )
+        axes[1].plot(
+            sites,
+            [site_metrics[s]["recall_by_area"]["large"]["recall"] for s in sites],
+            "o-",
+            color=COLORS[index],
+            label=name,
+        )
+    axes[0].set(ylabel="PQ", xlabel="Observatory", title="Main-test performance by site")
+    axes[1].set(
+        ylabel="Recall", xlabel="Observatory", title="Large-instance recall by site", ylim=(0, 1)
+    )
+    for ax in axes:
+        ax.legend(fontsize=8)
+    save(fig, args.out, "site_results")
     variants = [
         "no_background_correction",
         "single_threshold",
@@ -254,22 +289,20 @@ def main():
         rows = []
         for setting in settings:
             name = manifest["aliases"].get(setting["name"], setting["name"])
-            rows.append(
-                {
-                    "value": setting["value"],
-                    **{
-                        partition: read(f"results/final/classic/{name}/{partition}/metrics.json")[
-                            "pq"
-                        ]
-                        for partition in ("tune", "test")
-                    },
-                }
-            )
+            row = {"value": setting["value"]}
+            for partition in ("tune", "test"):
+                path = Path(f"results/final/classic/{name}/{partition}/metrics.json")
+                if path.exists() or not args.allow_incomplete:
+                    row[partition] = read(path)["pq"]
+                else:
+                    row[partition] = None
+                    summary["pending_curve_points"].append(str(path))
+            rows.append(row)
         summary["sensitivity"][parameter] = rows
         for partition, color in (("tune", COLORS[0]), ("test", COLORS[1])):
             ax.plot(
                 [r["value"] for r in rows],
-                [r[partition] for r in rows],
+                [r[partition] if r[partition] is not None else np.nan for r in rows],
                 "o-",
                 label=partition,
                 color=color,

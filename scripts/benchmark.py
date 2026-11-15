@@ -2,9 +2,14 @@
 
 import argparse
 import json
+import os
 import platform
 from pathlib import Path
 from time import perf_counter
+
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
 
 import cv2
 import numpy as np
