@@ -92,7 +92,7 @@ FP result is reported separately and does not require human reviews.
 
 ## Current verification
 
-33 local tests pass, including transient/permanent file-replacement failures
+42 local tests pass, including transient/permanent file-replacement failures
 and spawned-process pickling through the Windows I/O wrapper.
 The pretrained 512-pixel CUDA forward/backward path and
 training resumption ran successfully. Interrupted evaluation resumed from one
@@ -101,6 +101,36 @@ notebook verification remains exact on 20 tuning images plus an empty-set case.
 Intermediate search/validation scores are not test results.
 
 ## CPU timing and report generation
+
+### Stop the learned queue at a selected experiment
+
+To finish the current 1024 L1 seed, including validation post-processing and
+final test evaluation, without starting clDice or site-held-out U-Net runs:
+
+```powershell
+python -m scripts.resilient_io scripts.complete_study --phase learned --extensions --stop-after unet_1024_L1_545
+```
+
+Completed jobs are skipped and interrupted training resumes from its last
+completed epoch. The queue records `stopped_after`, not a claim that every
+optional extension is complete.
+
+### Return to classical error diagnosis
+
+```powershell
+python -m scripts.resilient_io scripts.diagnose_classic --sample-size 150 --workers 2
+```
+
+This traces each annotation instance through disk masking, candidate extraction,
+morphology, area filtering, shape filtering and final instances. It uses only a
+fixed random sample of the tuning partition. Zero-overlap misses are attributed
+to the stage after the last surviving overlap; stage coverage is not PQ recall.
+Results are exploratory diagnostics, not a new held-out score. Keep the frozen
+classical test result unchanged when investigating further improvements.
+
+The bounded filtering-order follow-up and its fixed selection rule are documented
+in [CLASSICAL_ORDER_EXPERIMENT.md](CLASSICAL_ORDER_EXPERIMENT.md). It compares
+delayed filtering with matched relaxed-threshold controls on tuning data only.
 
 Stop the experiment queues before controlled CPU timing, then resume them afterward.
 All three benchmarks use the same 50 tune images, one numerical thread, three

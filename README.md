@@ -11,15 +11,21 @@ On the frozen 287-observation main test split:
 - Untuned classical baseline: **PQ 0.1278**.
 - Tuned classical pipeline: **PQ 0.2314**.
 - 512-pixel ResNet34 U-Net with validation-selected post-processing: **PQ 0.3194**.
-- First 1024-pixel L1 seed: **PQ 0.3481**; remaining seeds/losses are running.
+- 1024-pixel L1, three seeds: **PQ 0.3522 ± 0.0037** (mean ± sample standard deviation).
 
-E1-E4, objective E5 and E7a are complete. Six-site E6 and three-seed/two-loss
-E7b are running. Two anonymous 100-instance human-review
+E1-E4, objective E5, E7a, all six classical E6 folds and three L1 E7b seeds are complete.
+clDice and site-held-out U-Net runs are deferred while work returns to classical
+candidate/filtering diagnosis. Two anonymous 100-instance human-review
 packages are ready locally. Human labels and team contributions remain pending.
 
 在同一测试集上，经典调参和 U-Net 均提高了 PQ。消融显示背景校正贡献最大，
-形状过滤没有明确收益。1024 结果目前只有一个种子，尚不能代表三种子结论。
+形状过滤没有明确收益。1024 的三种子 L1 对照已完成，训练队列已停止。
 所有负面结果保留，测试结果不用于重新挑参数。
+
+A controlled filtering-order follow-up is also complete: the frozen exploratory
+test result is PQ **0.2313**, versus **0.2314** originally. It does not establish
+an improvement, so the original method remains primary. See the
+[experiment and negative-result analysis](docs/CLASSICAL_ORDER_EXPERIMENT.md).
 
 See [measured results and uncertainty](docs/RESULTS.md),
 [experiment/resumption commands](docs/RUNNING_EXPERIMENTS.md),

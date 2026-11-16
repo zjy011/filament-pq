@@ -1,0 +1,41 @@
+{
+  "partition": "tune",
+  "observations": 150,
+  "annotation_instances": 1605,
+  "categories": {
+    "localization": 263,
+    "miss": 787,
+    "matched": 502,
+    "fragmentation": 53
+  },
+  "miss_stages": {
+    "area_filter": 672,
+    "shape_filter": 96,
+    "candidate_extraction": 19
+  },
+  "miss_stages_by_area": {
+    "area_filter/small": 317,
+    "area_filter/medium": 325,
+    "shape_filter/medium": 67,
+    "shape_filter/large": 23,
+    "shape_filter/small": 6,
+    "area_filter/large": 30,
+    "candidate_extraction/medium": 12,
+    "candidate_extraction/large": 4,
+    "candidate_extraction/small": 3
+  },
+  "stage_any_overlap": {
+    "disk": 1605,
+    "candidate": 1586,
+    "morphology": 1586,
+    "area": 914,
+    "shape": 818,
+    "final": 818
+  },
+  "notes": [
+    "Counts are annotation-instance occurrences, not unique physical filaments.",
+    "Any overlap is not an IoU > 0.5 match.",
+    "Stage attribution is descriptive, not a counterfactual ablation.",
+    "Tuning observations only; this is not a held-out result."
+  ]
+}

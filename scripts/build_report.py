@@ -733,19 +733,22 @@ def main():
     story.append(PageBreak())
     heading("10. Held-out-site extension (E6)")
     rows = []
+    classical_sites = learned_sites = 0
     for site in ("Bh", "Ch", "Lh", "Mh", "Th", "Uh"):
         c, u = extensions.get(f"site_classic_{site}"), extensions.get(f"site_unet_{site}")
         main_c = extensions.get("site_classic_main")
-        if c and u and main_c:
+        classical_sites += c is not None
+        learned_sites += u is not None
+        if main_c and (c or u):
             rows.append(
                 [
                     site,
                     f"{main_c['by_site'][site]['pq']:.4f}",
-                    f"{c['pq']:.4f}",
-                    f"{c['pq'] - main_c['by_site'][site]['pq']:+.4f}",
+                    f"{c['pq']:.4f}" if c else "pending",
+                    f"{c['pq'] - main_c['by_site'][site]['pq']:+.4f}" if c else "pending",
                     f"{unet['by_site'][site]['pq']:.4f}",
-                    f"{u['pq']:.4f}",
-                    f"{u['pq'] - unet['by_site'][site]['pq']:+.4f}",
+                    f"{u['pq']:.4f}" if u else "pending",
+                    f"{u['pq'] - unet['by_site'][site]['pq']:+.4f}" if u else "pending",
                 ]
             )
     if rows:
@@ -767,9 +770,9 @@ def main():
             "The six-site two-method extension is not yet complete in this snapshot. The frozen queue "
             "records completed fold outputs separately and does not infer unrun folds."
         )
-    if len(rows) < 6:
+    if min(classical_sites, learned_sites) < 6:
         p(
-            f"<b>{len(rows)} of 6 sites have both methods and the matched main comparator complete.</b>"
+            f"<b>Completed held-out sites: classical {classical_sites}/6; U-Net {learned_sites}/6.</b>"
         )
     p(
         "Differences are held-out-site PQ minus main-split site PQ; negative values mean lower "
@@ -778,7 +781,7 @@ def main():
         "Caption9",
     )
     p(
-        "Each E6 fold excludes one site from all training and parameter selection. The classical "
+        "Each E6 fold excludes one site from its fitting and within-fold parameter selection. The classical "
         "recipe fixes the untuned baseline modules and retunes only threshold and area, avoiding "
         "transfer of main-split settings selected with the excluded site's data. Its main-split "
         "comparator uses the same restricted recipe. U-Net retrains from ImageNet for each fold. "

@@ -1,0 +1,204 @@
+{
+  "tp": 426,
+  "fp": 988,
+  "fn": 1128,
+  "sum_iou": 276.45369452238083,
+  "pixel_intersection": 1435191,
+  "pixel_gt": 3597142,
+  "pixel_pred": 2082768,
+  "comparisons": 265,
+  "pq": 0.18628955156494664,
+  "sq": 0.6489523345595795,
+  "rq": 0.28706199460916443,
+  "dice": 0.5053569510784501,
+  "errors": {
+    "fn/fragmentation/large": 143,
+    "fn/fragmentation/medium": 13,
+    "fn/localization/large": 114,
+    "fn/localization/medium": 127,
+    "fn/localization/small": 9,
+    "fn/miss/large": 59,
+    "fn/miss/medium": 433,
+    "fn/miss/small": 230,
+    "fp/fragment_related/large": 53,
+    "fp/fragment_related/medium": 350,
+    "fp/isolated/large": 14,
+    "fp/isolated/medium": 322,
+    "fp/localization/large": 10,
+    "fp/localization/medium": 238,
+    "fp/overmerge/large": 1
+  },
+  "recall_by_area": {
+    "small": {
+      "matched": 19,
+      "total": 258,
+      "recall": 0.07364341085271318
+    },
+    "medium": {
+      "matched": 301,
+      "total": 874,
+      "recall": 0.34439359267734554
+    },
+    "large": {
+      "matched": 106,
+      "total": 422,
+      "recall": 0.25118483412322273
+    }
+  },
+  "ambiguous_matches": 0,
+  "observations": 165,
+  "pq_ci": {
+    "estimate": 0.18628955156494664,
+    "low": 0.1672049457992479,
+    "high": 0.20486102224374386,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 165,
+    "paired": false
+  },
+  "iou_0_3": {
+    "tp": 658,
+    "fp": 756,
+    "fn": 896,
+    "sum_iou": 372.14784306287766,
+    "pixel_intersection": 1435191,
+    "pixel_gt": 3597142,
+    "pixel_pred": 2082768,
+    "comparisons": 265,
+    "pq": 0.2507734791528825,
+    "sq": 0.5655742295788414,
+    "rq": 0.44339622641509435,
+    "dice": 0.5053569510784501,
+    "errors": {
+      "fn/fragmentation/large": 84,
+      "fn/fragmentation/medium": 3,
+      "fn/localization/large": 70,
+      "fn/localization/medium": 17,
+      "fn/miss/large": 59,
+      "fn/miss/medium": 433,
+      "fn/miss/small": 230,
+      "fp/fragment_related/large": 26,
+      "fp/fragment_related/medium": 308,
+      "fp/isolated/large": 14,
+      "fp/isolated/medium": 322,
+      "fp/localization/large": 2,
+      "fp/localization/medium": 84
+    },
+    "recall_by_area": {
+      "small": {
+        "matched": 28,
+        "total": 258,
+        "recall": 0.10852713178294573
+      },
+      "medium": {
+        "matched": 421,
+        "total": 874,
+        "recall": 0.4816933638443936
+      },
+      "large": {
+        "matched": 209,
+        "total": 422,
+        "recall": 0.495260663507109
+      }
+    },
+    "ambiguous_matches": 0
+  },
+  "annotation_noise": {
+    "false_positives": 592,
+    "corroborated": 94
+  },
+  "timing_seconds": {
+    "median": 0.27198069996666163,
+    "max": 0.5426636000047438
+  },
+  "by_site": {
+    "Mh": {
+      "tp": 426,
+      "fp": 988,
+      "fn": 1128,
+      "sum_iou": 276.45369452238083,
+      "pixel_intersection": 1435191,
+      "pixel_gt": 3597142,
+      "pixel_pred": 2082768,
+      "comparisons": 265,
+      "pq": 0.18628955156494664,
+      "sq": 0.6489523345595795,
+      "rq": 0.28706199460916443,
+      "dice": 0.5053569510784501,
+      "errors": {
+        "fn/fragmentation/large": 143,
+        "fn/fragmentation/medium": 13,
+        "fn/localization/large": 114,
+        "fn/localization/medium": 127,
+        "fn/localization/small": 9,
+        "fn/miss/large": 59,
+        "fn/miss/medium": 433,
+        "fn/miss/small": 230,
+        "fp/fragment_related/large": 53,
+        "fp/fragment_related/medium": 350,
+        "fp/isolated/large": 14,
+        "fp/isolated/medium": 322,
+        "fp/localization/large": 10,
+        "fp/localization/medium": 238,
+        "fp/overmerge/large": 1
+      },
+      "recall_by_area": {
+        "small": {
+          "matched": 19,
+          "total": 258,
+          "recall": 0.07364341085271318
+        },
+        "medium": {
+          "matched": 301,
+          "total": 874,
+          "recall": 0.34439359267734554
+        },
+        "large": {
+          "matched": 106,
+          "total": 422,
+          "recall": 0.25118483412322273
+        }
+      },
+      "ambiguous_matches": 0
+    }
+  },
+  "same_reference": {
+    "human": {
+      "tp": 708,
+      "fp": 683,
+      "fn": 683,
+      "sum_iou": 442.23638141155243,
+      "pixel_intersection": 2295672,
+      "pixel_gt": 3550974,
+      "pixel_pred": 3550974,
+      "comparisons": 270,
+      "pq": 0.3179269456589162,
+      "sq": 0.6246276573609497,
+      "rq": 0.5089863407620417,
+      "dice": 0.6464907937934775
+    },
+    "method": {
+      "tp": 388,
+      "fp": 948,
+      "fn": 1003,
+      "sum_iou": 249.72750622034073,
+      "pixel_intersection": 1417730,
+      "pixel_gt": 3550974,
+      "pixel_pred": 2137210,
+      "comparisons": 270,
+      "pq": 0.18315181974355757,
+      "sq": 0.6436275933513936,
+      "rq": 0.28456178951228456,
+      "dice": 0.4984824682183277
+    },
+    "method_minus_human": {
+      "estimate": -0.13477512591535865,
+      "low": -0.18028975083025017,
+      "high": -0.0949001946011009,
+      "samples": 1000,
+      "seed": 543,
+      "observations": 65,
+      "paired": true
+    }
+  }
+}

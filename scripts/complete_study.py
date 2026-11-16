@@ -190,13 +190,32 @@ def main():
     parser.add_argument("--phase", choices=["classic", "learned"], required=True)
     parser.add_argument("--extensions", action="store_true")
     parser.add_argument(
+        "--stop-after",
+        choices=["unet_e7a"]
+        + [f"unet_1024_{loss}_{seed}" for loss in ("L1", "L2") for seed in (543, 544, 545)]
+        + [f"site_unet_{site}" for site in ("Bh", "Ch", "Lh", "Mh", "Th", "Uh")],
+        help="Stop the learned queue after this experiment's final evaluation.",
+    )
+    parser.add_argument(
         "--wait-for", type=Path, help="Wait for an independently running job's progress.json"
     )
     parser.add_argument(
         "--wait-existing", action="store_true", help="Wait for already-running full tune/E7a jobs"
     )
     args = parser.parse_args()
+    if args.stop_after and args.phase != "learned":
+        parser.error("--stop-after requires --phase learned")
+    if args.stop_after and args.stop_after != "unet_e7a" and not args.extensions:
+        parser.error("This --stop-after target requires --extensions")
     queue = Queue(args.phase)
+
+    def stop_after(name):
+        if name != args.stop_after:
+            return False
+        write_json(queue.progress, {"status": "stopped_after", "experiment": name})
+        print(f"[{args.phase}] Requested stopping point reached: {name}", flush=True)
+        return True
+
     if args.wait_for:
         queue.wait_existing(args.wait_for)
     if args.phase == "classic":
@@ -273,6 +292,8 @@ def main():
         else:
             queue.train("results/unet_e7a")
         queue.learned_evaluation("unet_e7a", "results/unet_e7a/best.pt", control=True)
+        if stop_after("unet_e7a"):
+            return
         if args.extensions:
             for loss in ("L1", "L2"):
                 for seed in (543, 544, 545):
@@ -280,12 +301,16 @@ def main():
                     out = Path("results") / name
                     queue.train(out, size=1024, seed=seed, loss=loss)
                     queue.learned_evaluation(name, out / "best.pt")
+                    if stop_after(name):
+                        return
             for site in ("Bh", "Ch", "Lh", "Mh", "Th", "Uh"):
                 split = f"splits/site_{site}.json"
                 name = f"site_unet_{site}"
                 out = Path("results") / name
                 queue.train(out, split=split)
                 queue.learned_evaluation(name, out / "best.pt", split=split)
+                if stop_after(name):
+                    return
     write_json(queue.progress, {"status": "complete", "extensions": args.extensions})
 
 

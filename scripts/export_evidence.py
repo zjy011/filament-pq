@@ -56,6 +56,23 @@ def main():
         record(target, source)
 
     copy(args.summary, evidence / "report_summary.json")
+    diagnosis = Path("results/classic_diagnosis")
+    if (diagnosis / "summary.json").exists():
+        for filename in ("summary.json", "provenance.json"):
+            copy(diagnosis / filename, evidence / "classic_diagnosis" / filename)
+    order_analysis = Path("results/classic_order_analysis")
+    if (order_analysis / "summary.json").exists():
+        copy(order_analysis / "summary.json", evidence / "classic_order" / "analysis.json")
+        copy(order_analysis / "comparison.png", figures / "classic_order_comparison.png")
+        for run_name in ("classic_order_pilot", "classic_order_remainder"):
+            run = Path("results") / run_name
+            if (run / "summary.json").exists():
+                for filename in ("summary.json", "provenance.json"):
+                    copy(run / filename, evidence / "classic_order" / run_name / filename)
+        followup = Path("results/followup/classic_late_area_300")
+        if (followup / "metrics.json").exists():
+            for filename in ("metrics.json", "provenance.json"):
+                copy(followup / filename, evidence / "classic_order" / "exploratory_test" / filename)
     for name in (
         "pipeline",
         "main_results",

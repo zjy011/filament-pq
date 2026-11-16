@@ -1,0 +1,366 @@
+{
+  "partition": "tune",
+  "cohort": "remainder",
+  "observations": 521,
+  "variants": {
+    "original": {
+      "tp": 1675,
+      "fp": 2402,
+      "fn": 3869,
+      "sum_iou": 1087.4507074952126,
+      "pixel_intersection": 5051402,
+      "pixel_gt": 11797073,
+      "pixel_pred": 7700480,
+      "comparisons": 873,
+      "pq": 0.22605772944500832,
+      "sq": 0.6492243029822165,
+      "rq": 0.3481966531545577,
+      "dice": 0.5181575349481035,
+      "errors": {
+        "fn/fragmentation/large": 233,
+        "fn/fragmentation/medium": 11,
+        "fn/localization/large": 407,
+        "fn/localization/medium": 428,
+        "fn/localization/small": 59,
+        "fn/miss/large": 231,
+        "fn/miss/medium": 1457,
+        "fn/miss/small": 1043,
+        "fp/fragment_related/large": 133,
+        "fp/fragment_related/medium": 415,
+        "fp/isolated/large": 72,
+        "fp/isolated/medium": 909,
+        "fp/localization/large": 95,
+        "fp/localization/medium": 761,
+        "fp/overmerge/large": 15,
+        "fp/overmerge/medium": 2
+      },
+      "recall_by_area": {
+        "small": {
+          "matched": 55,
+          "total": 1157,
+          "recall": 0.04753673292999136
+        },
+        "medium": {
+          "matched": 1118,
+          "total": 3014,
+          "recall": 0.37093563370935634
+        },
+        "large": {
+          "matched": 502,
+          "total": 1373,
+          "recall": 0.36562272396212675
+        }
+      },
+      "ambiguous_matches": 0,
+      "delta_vs_original": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0,
+        "samples": 1000,
+        "seed": 543,
+        "observations": 521,
+        "paired": true
+      }
+    },
+    "original_no_shape": {
+      "tp": 1884,
+      "fp": 3388,
+      "fn": 3660,
+      "sum_iou": 1222.0304558873177,
+      "pixel_intersection": 5783335,
+      "pixel_gt": 11797073,
+      "pixel_pred": 9386541,
+      "comparisons": 873,
+      "pq": 0.22596717009750697,
+      "sq": 0.6486361230824403,
+      "rq": 0.34837278106508873,
+      "dice": 0.5460196735080237,
+      "errors": {
+        "fn/fragmentation/large": 343,
+        "fn/fragmentation/medium": 24,
+        "fn/localization/large": 356,
+        "fn/localization/medium": 491,
+        "fn/localization/small": 76,
+        "fn/miss/large": 125,
+        "fn/miss/medium": 1230,
+        "fn/miss/small": 1015,
+        "fp/fragment_related/large": 185,
+        "fp/fragment_related/medium": 674,
+        "fp/isolated/large": 106,
+        "fp/isolated/medium": 1525,
+        "fp/localization/large": 75,
+        "fp/localization/medium": 801,
+        "fp/overmerge/large": 17,
+        "fp/overmerge/medium": 5
+      },
+      "recall_by_area": {
+        "small": {
+          "matched": 66,
+          "total": 1157,
+          "recall": 0.05704407951598963
+        },
+        "medium": {
+          "matched": 1269,
+          "total": 3014,
+          "recall": 0.42103516921035167
+        },
+        "large": {
+          "matched": 549,
+          "total": 1373,
+          "recall": 0.3998543335761107
+        }
+      },
+      "ambiguous_matches": 0,
+      "delta_vs_original": {
+        "estimate": -9.055934750135108e-05,
+        "low": -0.00420248848225162,
+        "high": 0.004225335186071083,
+        "samples": 1000,
+        "seed": 543,
+        "observations": 521,
+        "paired": true
+      }
+    },
+    "relax_300": {
+      "tp": 2320,
+      "fp": 7670,
+      "fn": 3224,
+      "sum_iou": 1492.614861369133,
+      "pixel_intersection": 6048052,
+      "pixel_gt": 11797073,
+      "pixel_pred": 11362032,
+      "comparisons": 873,
+      "pq": 0.1921739231838719,
+      "sq": 0.6433684747280746,
+      "rq": 0.29869962662546673,
+      "dice": 0.5223044672926695,
+      "errors": {
+        "fn/fragmentation/large": 395,
+        "fn/fragmentation/medium": 133,
+        "fn/fragmentation/small": 1,
+        "fn/localization/large": 342,
+        "fn/localization/medium": 873,
+        "fn/localization/small": 219,
+        "fn/miss/large": 93,
+        "fn/miss/medium": 618,
+        "fn/miss/small": 550,
+        "fp/fragment_related/large": 160,
+        "fp/fragment_related/medium": 768,
+        "fp/fragment_related/small": 336,
+        "fp/isolated/large": 96,
+        "fp/isolated/medium": 1739,
+        "fp/isolated/small": 3212,
+        "fp/localization/large": 83,
+        "fp/localization/medium": 800,
+        "fp/localization/small": 412,
+        "fp/overmerge/large": 23,
+        "fp/overmerge/medium": 40,
+        "fp/overmerge/small": 1
+      },
+      "recall_by_area": {
+        "small": {
+          "matched": 387,
+          "total": 1157,
+          "recall": 0.334485738980121
+        },
+        "medium": {
+          "matched": 1390,
+          "total": 3014,
+          "recall": 0.46118115461181153
+        },
+        "large": {
+          "matched": 543,
+          "total": 1373,
+          "recall": 0.3954843408594319
+        }
+      },
+      "ambiguous_matches": 0,
+      "delta_vs_original": {
+        "estimate": -0.033883806261136434,
+        "low": -0.042246894956002916,
+        "high": -0.025736965341432525,
+        "samples": 1000,
+        "seed": 543,
+        "observations": 521,
+        "paired": true
+      }
+    },
+    "late_area_300": {
+      "tp": 1757,
+      "fp": 2631,
+      "fn": 3787,
+      "sum_iou": 1137.8156086206436,
+      "pixel_intersection": 5304276,
+      "pixel_gt": 11797073,
+      "pixel_pred": 8421549,
+      "comparisons": 873,
+      "pq": 0.22912114551362134,
+      "sq": 0.6475899878318974,
+      "rq": 0.35380587998389046,
+      "dice": 0.5246921377727919,
+      "errors": {
+        "fn/fragmentation/large": 239,
+        "fn/fragmentation/medium": 11,
+        "fn/localization/large": 378,
+        "fn/localization/medium": 486,
+        "fn/localization/small": 120,
+        "fn/miss/large": 213,
+        "fn/miss/medium": 1355,
+        "fn/miss/small": 985,
+        "fp/fragment_related/large": 138,
+        "fp/fragment_related/medium": 427,
+        "fp/isolated/large": 96,
+        "fp/isolated/medium": 1063,
+        "fp/localization/large": 105,
+        "fp/localization/medium": 741,
+        "fp/overmerge/large": 23,
+        "fp/overmerge/medium": 38
+      },
+      "recall_by_area": {
+        "small": {
+          "matched": 52,
+          "total": 1157,
+          "recall": 0.0449438202247191
+        },
+        "medium": {
+          "matched": 1162,
+          "total": 3014,
+          "recall": 0.3855341738553417
+        },
+        "large": {
+          "matched": 543,
+          "total": 1373,
+          "recall": 0.3954843408594319
+        }
+      },
+      "ambiguous_matches": 0,
+      "delta_vs_original": {
+        "estimate": 0.0030634160686130174,
+        "low": -0.0005241043110120712,
+        "high": 0.006689027101472283,
+        "samples": 1000,
+        "seed": 543,
+        "observations": 521,
+        "paired": true
+      }
+    },
+    "late_both_300": {
+      "tp": 1824,
+      "fp": 2963,
+      "fn": 3720,
+      "sum_iou": 1177.6887432336807,
+      "pixel_intersection": 5671609,
+      "pixel_gt": 11797073,
+      "pixel_pred": 9375202,
+      "comparisons": 873,
+      "pq": 0.22799123864750376,
+      "sq": 0.6456626881763601,
+      "rq": 0.35311199303068436,
+      "dice": 0.5357581081862955,
+      "errors": {
+        "fn/fragmentation/large": 252,
+        "fn/fragmentation/medium": 15,
+        "fn/localization/large": 362,
+        "fn/localization/medium": 518,
+        "fn/localization/small": 131,
+        "fn/miss/large": 165,
+        "fn/miss/medium": 1301,
+        "fn/miss/small": 976,
+        "fp/fragment_related/large": 164,
+        "fp/fragment_related/medium": 447,
+        "fp/isolated/large": 134,
+        "fp/isolated/medium": 1281,
+        "fp/localization/large": 123,
+        "fp/localization/medium": 758,
+        "fp/overmerge/large": 22,
+        "fp/overmerge/medium": 34
+      },
+      "recall_by_area": {
+        "small": {
+          "matched": 50,
+          "total": 1157,
+          "recall": 0.043215211754537596
+        },
+        "medium": {
+          "matched": 1180,
+          "total": 3014,
+          "recall": 0.391506303915063
+        },
+        "large": {
+          "matched": 594,
+          "total": 1373,
+          "recall": 0.43262927895120173
+        }
+      },
+      "ambiguous_matches": 0,
+      "delta_vs_original": {
+        "estimate": 0.001933509202495437,
+        "low": -0.002899774535708792,
+        "high": 0.00708198927317831,
+        "samples": 1000,
+        "seed": 543,
+        "observations": 521,
+        "paired": true
+      }
+    },
+    "late_area_no_shape_300": {
+      "tp": 1993,
+      "fp": 3914,
+      "fn": 3551,
+      "sum_iou": 1286.1177560687065,
+      "pixel_intersection": 6201578,
+      "pixel_gt": 11797073,
+      "pixel_pred": 10803848,
+      "comparisons": 873,
+      "pq": 0.22462977138567924,
+      "sq": 0.6453174892467167,
+      "rq": 0.34809186970570255,
+      "dice": 0.5487898479889382,
+      "errors": {
+        "fn/fragmentation/large": 346,
+        "fn/fragmentation/medium": 29,
+        "fn/localization/large": 323,
+        "fn/localization/medium": 594,
+        "fn/localization/small": 166,
+        "fn/miss/large": 95,
+        "fn/miss/medium": 1067,
+        "fn/miss/small": 931,
+        "fp/fragment_related/large": 197,
+        "fp/fragment_related/medium": 696,
+        "fp/isolated/large": 157,
+        "fp/isolated/medium": 1872,
+        "fp/localization/large": 107,
+        "fp/localization/medium": 813,
+        "fp/overmerge/large": 29,
+        "fp/overmerge/medium": 43
+      },
+      "recall_by_area": {
+        "small": {
+          "matched": 60,
+          "total": 1157,
+          "recall": 0.05185825410544512
+        },
+        "medium": {
+          "matched": 1324,
+          "total": 3014,
+          "recall": 0.43928334439283345
+        },
+        "large": {
+          "matched": 609,
+          "total": 1373,
+          "recall": 0.4435542607428988
+        }
+      },
+      "ambiguous_matches": 0,
+      "delta_vs_original": {
+        "estimate": -0.0014279580593290764,
+        "low": -0.007914480496794269,
+        "high": 0.004913154253021135,
+        "samples": 1000,
+        "seed": 543,
+        "observations": 521,
+        "paired": true
+      }
+    }
+  }
+}

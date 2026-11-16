@@ -1,17 +1,9 @@
 {
   "automatic_experiments_complete": false,
   "pending_automatic": [
-    "unet_1024_L1_544",
-    "unet_1024_L1_545",
     "unet_1024_L2_543",
     "unet_1024_L2_544",
     "unet_1024_L2_545",
-    "site_classic_Bh",
-    "site_classic_Ch",
-    "site_classic_Lh",
-    "site_classic_Mh",
-    "site_classic_Th",
-    "site_classic_Uh",
     "site_unet_Bh",
     "site_unet_Ch",
     "site_unet_Lh",
@@ -24,7 +16,67 @@
     {
       "path": "docs/evidence/report_summary.json",
       "source": "results\\report\\summary.json",
-      "sha256": "db23b4dbd78c1ce0362825a0dad54dad7f56f40533ecfec5cffcde54527988be",
+      "sha256": "6b4b61d617638090ce2ea1aa81e1752ab09ad35a0a46b7f34cee420e8317c847",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_diagnosis/summary.json",
+      "source": "results\\classic_diagnosis\\summary.json",
+      "sha256": "25a54a5c13bb4c1ed029f436c6c2dd09b475848979dc8d544865b9be8a64bb65",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_diagnosis/provenance.json",
+      "source": "results\\classic_diagnosis\\provenance.json",
+      "sha256": "df762cfb8992a983a0a93906597fad19fd3c8bd382c929ef94e1870f2df6ad76",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_order/analysis.json",
+      "source": "results\\classic_order_analysis\\summary.json",
+      "sha256": "c3a912f0a07b53918dfca1032c797a7c355c7aec188b2b9ad917860fbaa19365",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/figures/classic_order_comparison.png",
+      "source": "results\\classic_order_analysis\\comparison.png",
+      "sha256": "4971ceb743201eda28772240bdff940ec9455bba6bbe5e71aafe28a31c00338a",
+      "hash_mode": "raw"
+    },
+    {
+      "path": "docs/evidence/classic_order/classic_order_pilot/summary.json",
+      "source": "results\\classic_order_pilot\\summary.json",
+      "sha256": "2a0d1a2912ba656dca946fa7c395100c22eac97d5ab81a1f2524ed9d270cc469",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_order/classic_order_pilot/provenance.json",
+      "source": "results\\classic_order_pilot\\provenance.json",
+      "sha256": "a1ef3bf54b07178230a82326d6a6b030804830931ebe0e1087053273a2032d27",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_order/classic_order_remainder/summary.json",
+      "source": "results\\classic_order_remainder\\summary.json",
+      "sha256": "2b9a568d9e8925a99640eda5055a252d4c5117cb2c06532732cb0dda2927a628",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_order/classic_order_remainder/provenance.json",
+      "source": "results\\classic_order_remainder\\provenance.json",
+      "sha256": "f213fcc1b267f09cb1ef42e43c03e7da0829666943836af2c3e795822e508608",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_order/exploratory_test/metrics.json",
+      "source": "results\\followup\\classic_late_area_300\\metrics.json",
+      "sha256": "21dab64f2d94417d0d8e07d723f710b51d849b1b9098fb04f80f4e37780a11b1",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/classic_order/exploratory_test/provenance.json",
+      "source": "results\\followup\\classic_late_area_300\\provenance.json",
+      "sha256": "79099eece1245d80514edfb1f0e27ff8f4325f4e1a9d4d35e30cbe3c1e484637",
       "hash_mode": "utf8_lf"
     },
     {
@@ -112,6 +164,78 @@
       "hash_mode": "utf8_lf"
     },
     {
+      "path": "docs/evidence/extensions/unet_1024_L1_544/metrics.json",
+      "source": "results\\final\\unet_1024_L1_544\\metrics.json",
+      "sha256": "f24847b9c694cb3e8de45bcf9b6e70ff497e0aaececbf99ee7cbb8df54b9ad0c",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_544/provenance.json",
+      "source": "results\\final\\unet_1024_L1_544\\provenance.json",
+      "sha256": "3939a3eafa3887a7b4315ef5d226a6f05e70b96e043fe57f79aa0a1764c1704d",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/unet_1024_L1_544.yaml",
+      "source": "results\\final\\unet_1024_L1_544\\provenance.json",
+      "sha256": "7116afe05c1c3c0710b934f0275aa98828d06e838bffcd12cd41856ec37a8653",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_544/training_history.json",
+      "source": "results\\unet_1024_L1_544\\history.json",
+      "sha256": "78e738f07af7c2596eaeb6d30d741f941234c883b5cc3206a31c5ca1e76095e5",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_544/training_provenance.json",
+      "source": "results\\unet_1024_L1_544\\provenance.json",
+      "sha256": "1463a558b5fae06ede893350bcbe4d1c744fcd0a46b6583d3c7407f04cf5ed78",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_544/validation_selection.json",
+      "source": "results\\unet_1024_L1_544_postprocess\\best.json",
+      "sha256": "f82f7183166f2219ece794461a30210bade2c0584668cac97062d41843e7b872",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_545/metrics.json",
+      "source": "results\\final\\unet_1024_L1_545\\metrics.json",
+      "sha256": "2c693c3e0ffae3317a5e8a701b1d92223e2b7b6ec797ce3e461a4992f45b3de3",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_545/provenance.json",
+      "source": "results\\final\\unet_1024_L1_545\\provenance.json",
+      "sha256": "0706d87b5dc268dfab56c523514e3a354e285f67b02473a152bb9cf8f327fa35",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/unet_1024_L1_545.yaml",
+      "source": "results\\final\\unet_1024_L1_545\\provenance.json",
+      "sha256": "7116afe05c1c3c0710b934f0275aa98828d06e838bffcd12cd41856ec37a8653",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_545/training_history.json",
+      "source": "results\\unet_1024_L1_545\\history.json",
+      "sha256": "9020de1a252cf8f5a2e7995dea79f4c450e8691fad6df8a3e1ca3be7e676fadd",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_545/training_provenance.json",
+      "source": "results\\unet_1024_L1_545\\provenance.json",
+      "sha256": "304d98f5a1e5e997d6ba434000f1ce9f7ddd967fee73b2cd4bae75097d68ed62",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/unet_1024_L1_545/validation_selection.json",
+      "source": "results\\unet_1024_L1_545_postprocess\\best.json",
+      "sha256": "a8c8c81c5749eb2ce53cb1203c1a1343e060b40b35deda8660b6d27842f112aa",
+      "hash_mode": "utf8_lf"
+    },
+    {
       "path": "docs/evidence/extensions/site_classic_main/metrics.json",
       "source": "results\\final\\site_classic_main\\metrics.json",
       "sha256": "46996a83b027d0c8c48e6edf32323d331b713fd7e894ef630462c49ded4f60ca",
@@ -126,6 +250,114 @@
     {
       "path": "configs/measured_extensions/site_classic_main.yaml",
       "source": "results\\final\\site_classic_main\\provenance.json",
+      "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Bh/metrics.json",
+      "source": "results\\final\\site_classic_Bh\\metrics.json",
+      "sha256": "423bb44827f6a19bd50296fcffe673e6e3ff5a56d9afc2443b2331a9c0f60033",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Bh/provenance.json",
+      "source": "results\\final\\site_classic_Bh\\provenance.json",
+      "sha256": "63e82d5694b266751403997b89067a37a56422093a915c75692970d04f22cf18",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/site_classic_Bh.yaml",
+      "source": "results\\final\\site_classic_Bh\\provenance.json",
+      "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Ch/metrics.json",
+      "source": "results\\final\\site_classic_Ch\\metrics.json",
+      "sha256": "9758662df721f6c7c8eef4be85d57b21f331117cacb28b5ccf80cec77972e2ab",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Ch/provenance.json",
+      "source": "results\\final\\site_classic_Ch\\provenance.json",
+      "sha256": "0a067c2121f1c4997978ed8fc1cc351ed9a8fb811630e368b8ee9160e2778179",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/site_classic_Ch.yaml",
+      "source": "results\\final\\site_classic_Ch\\provenance.json",
+      "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Lh/metrics.json",
+      "source": "results\\final\\site_classic_Lh\\metrics.json",
+      "sha256": "d6ff757d79e90424105e77f620921f62577676206c4806659384ab7fe12fac5c",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Lh/provenance.json",
+      "source": "results\\final\\site_classic_Lh\\provenance.json",
+      "sha256": "834b077ec8e5f2a4efad5f938a7e52c504e8170632909fec70715682cc536bc2",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/site_classic_Lh.yaml",
+      "source": "results\\final\\site_classic_Lh\\provenance.json",
+      "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Mh/metrics.json",
+      "source": "results\\final\\site_classic_Mh\\metrics.json",
+      "sha256": "9093a6a3514c4d447f0d481d30d66d89be1aeacabe2f0d1b12f1ae8d469d62d7",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Mh/provenance.json",
+      "source": "results\\final\\site_classic_Mh\\provenance.json",
+      "sha256": "9f6abe7abffd8d119fe77fe6fcdf9b55938d5392e492ca2ee0a4865327a06f5c",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/site_classic_Mh.yaml",
+      "source": "results\\final\\site_classic_Mh\\provenance.json",
+      "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Th/metrics.json",
+      "source": "results\\final\\site_classic_Th\\metrics.json",
+      "sha256": "a8f7e819b57df60c9ee7109355db84a2def9fac96966a1bcc17eaa0d8d64cc53",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Th/provenance.json",
+      "source": "results\\final\\site_classic_Th\\provenance.json",
+      "sha256": "ed97ba23d9eea2444854ed862d0cfa9a1abdd4a8fd979d4bc5919416dab639bc",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/site_classic_Th.yaml",
+      "source": "results\\final\\site_classic_Th\\provenance.json",
+      "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Uh/metrics.json",
+      "source": "results\\final\\site_classic_Uh\\metrics.json",
+      "sha256": "3bba5fc4d6a44df50a8cbec5a853693885ab2e013207d83f023bf438a3385529",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "docs/evidence/extensions/site_classic_Uh/provenance.json",
+      "source": "results\\final\\site_classic_Uh\\provenance.json",
+      "sha256": "a6ca60f8adfe701900bcac1b4f70355450abb9b5302ed60c7fc5df8b405f0731",
+      "hash_mode": "utf8_lf"
+    },
+    {
+      "path": "configs/measured_extensions/site_classic_Uh.yaml",
+      "source": "results\\final\\site_classic_Uh\\provenance.json",
       "sha256": "1b53c0ee2a942a9e2db740073bd1b17fc4bbf5c260396810052ef724af741b92",
       "hash_mode": "utf8_lf"
     }

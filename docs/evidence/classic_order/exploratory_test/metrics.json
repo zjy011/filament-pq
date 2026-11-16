@@ -1,0 +1,85 @@
+{
+  "tp": 993,
+  "fp": 1499,
+  "fn": 2102,
+  "sum_iou": 646.0007839202881,
+  "pixel_intersection": 3049521,
+  "pixel_gt": 6425942,
+  "pixel_pred": 4733728,
+  "comparisons": 478,
+  "pq": 0.23125139929131486,
+  "sq": 0.6505546665863928,
+  "rq": 0.3554680508322892,
+  "dice": 0.5465253004793152,
+  "errors": {
+    "fn/fragmentation/large": 133,
+    "fn/fragmentation/medium": 17,
+    "fn/localization/large": 228,
+    "fn/localization/medium": 289,
+    "fn/localization/small": 73,
+    "fn/miss/large": 116,
+    "fn/miss/medium": 687,
+    "fn/miss/small": 559,
+    "fp/fragment_related/large": 84,
+    "fp/fragment_related/medium": 245,
+    "fp/isolated/large": 31,
+    "fp/isolated/medium": 595,
+    "fp/localization/large": 65,
+    "fp/localization/medium": 435,
+    "fp/overmerge/large": 22,
+    "fp/overmerge/medium": 22
+  },
+  "recall_by_area": {
+    "small": {
+      "matched": 31,
+      "total": 663,
+      "recall": 0.04675716440422323
+    },
+    "medium": {
+      "matched": 634,
+      "total": 1627,
+      "recall": 0.3896742470805163
+    },
+    "large": {
+      "matched": 328,
+      "total": 805,
+      "recall": 0.4074534161490683
+    }
+  },
+  "ambiguous_matches": 0,
+  "observations": 287,
+  "pq_ci": {
+    "estimate": 0.23125139929131486,
+    "low": 0.21670519654449585,
+    "high": 0.24557478006932879,
+    "samples": 1000,
+    "seed": 543,
+    "observations": 287,
+    "paired": false
+  },
+  "interpretation": "Exploratory follow-up on the previously inspected main test; not a prospectively blind confirmation or an equivalence test.",
+  "comparisons_to_saved": {
+    "original": {
+      "estimate": -0.00010071133095312934,
+      "low": -0.004373373896739184,
+      "high": 0.004451244137731944,
+      "samples": 1000,
+      "seed": 543,
+      "observations": 287,
+      "paired": true,
+      "source": "results/final/classic/full/test/per_image.json",
+      "source_sha256": "7a887f0323fda1ebcb9aed1e308825425e9af9c26a89f6cec205153bb18bbd61"
+    },
+    "unet_512": {
+      "estimate": -0.08813500554577239,
+      "low": -0.10237846866834546,
+      "high": -0.0740897747801039,
+      "samples": 1000,
+      "seed": 543,
+      "observations": 287,
+      "paired": true,
+      "source": "results/final/unet_e7a/per_image.json",
+      "source_sha256": "84f5798347f6280ca7881c542fd0e6afd563ea77f951181fd5cda009d7792ef7"
+    }
+  }
+}
